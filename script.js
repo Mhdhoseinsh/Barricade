@@ -9,7 +9,7 @@ function sfxMove(){const ctx=getSfxCtx();if(!ctx)return;const t0=ctx.currentTime
 function sfxWall(){const ctx=getSfxCtx();if(!ctx)return;const t0=ctx.currentTime;sfxKick(ctx,t0,0.42);sfxNoiseBurst(ctx,t0+0.005,0.09,'lowpass',550,0.22);sfxTone(ctx,t0+0.02,950,680,0.16,'triangle',0.07)}
 function sfxGameStart(){const ctx=getSfxCtx();if(!ctx)return;const t0=ctx.currentTime;sfxKick(ctx,t0,0.46);sfxNoiseBurst(ctx,t0,0.05,'bandpass',3200,0.11,6);sfxTone(ctx,t0,110,100,0.55,'sawtooth',0.05);[220,220,330,440].forEach((freq,i)=>{sfxBrassNote(ctx,t0+[0.09,0.21,0.33,0.45][i],freq,0.15,0.15)});sfxBrassNote(ctx,t0+0.6,440,0.35,0.2)}
 function sfxWin(){const ctx=getSfxCtx();if(!ctx)return;const t0=ctx.currentTime;sfxKick(ctx,t0,0.48);[523.25,659.25,783.99,1046.5].forEach((freq,i)=>{sfxBrassNote(ctx,t0+i*0.11,freq,0.28,0.17)});const chordTime=t0+0.46;[523.25,659.25,783.99,1046.5].forEach(freq=>{sfxBrassNote(ctx,chordTime,freq,0.55,0.13)});sfxNoiseBurst(ctx,chordTime,0.35,'highpass',4200,0.05)}
-const translations={en:{pageTitle:'Barricade - Dark Mode',aboutBtn:'About',langBtn:'فارسی',aboutTitle:'About Us',aboutText:'Barricade is an offline, pass-and-play strategy board game where players race to reach the opposite side while placing walls to slow each other down.',aboutCreatorLabel:'Created by',aboutCreatorName:'Mohammad hossein shamsi',aboutClose:'Close',startSubtitle:'Offline pass-and-play — choose a mode',mode2pTitle:'2 Player',mode2pDesc:'1v1 — each player has 10 walls, first to reach the opposite side wins',mode4pTitle:'4 Player (2v2 Teams)',mode4pDesc:'Two teams of two — each player has 10 walls, get both teammates to the finish',move:'Move',horizontal:'Horizontal',vertical:'Vertical',undo:'Undo',repeat:'Repeat',resign:'Resign',newGame:'Back to Home',moveHistory:'MOVE HISTORY',startGame:'Start a game',gameInfo:'GAME INFO',mode:'Mode',wallsLeft:'Walls Left',status:'Status',objective:'OBJECTIVE',walls:'WALLS',wallsText:'• Tap a spot to select a wall, then confirm.<br>• 10 walls per player.',rules:'RULES',rulesText:'• A wall can never fully block a path.<br>• Walls can\'t overlap or cross like a "+".',placeWall:'Place Wall',match:'MATCH',vs:'VS',gameOver:'Game Over',turnSuffix:"'s Turn",mode2p:'2 Player',mode4p:'4 Player (2v2 Teams)',objective2p:'Reach the opposite side before your opponent.',objective4p:'Get both teammates to their target edge before the other team.',teamA:'Team A (Red/Blue)',teamB:'Team B (Green/Yellow)',players:{player1:'Player 1 (Red)',player2:'Player 2 (Blue)',red:'Red',blue:'Blue',green:'Green',yellow:'Yellow'},teamNames:{0:'Red & Blue',1:'Green & Yellow'},alertPerpendicular:'Cannot intersect perpendicular walls!',alertBlocked:'This wall would completely block a path — not allowed!',alertWins:'{name} Wins!',alertTeamWins:'Team {team} Wins!',confirmResign:'{name} resigns — end the game?',resignWinner:'{name} Resigned! Winner: {winner}',resignTeamWinner:'{name} Resigned! Team {team} Wins!',confirmNewGame:'Go back to home? Current progress will be lost.',confirmRepeat:'Repeat this game with the same players?',nameEntryTitle:'Enter Player Names',startGameBtn:'Start Game',backBtn:'Back',toastNoWalls:'You have no walls left to place!',toastWallExists:'There is already a wall in this spot.',toastInvalidMove:"You can't move there.",toastNothingToUndo:'Nothing to undo yet.',goWinnerLabel:'WINNER',goTagWinner:'Winner',goTagLoser:'Loser',goPlayAgain:'Play Again',goBackHome:'Back to Home'},fa:{pageTitle:'باریکید - حالت تیره',aboutBtn:'درباره ما',langBtn:'English',aboutTitle:'درباره ما',aboutText:'باریکید یک بازی فکری آفلاین و نوبتی است که در آن بازیکنان باید زودتر از بقیه به سمت مقابل برسند و در همین حین با گذاشتن دیوار مسیر حریف را کندتر کنند.',aboutCreatorLabel:'سازنده',aboutCreatorName:'محمدحسین شمسی',aboutClose:'بستن',startSubtitle:'یک بازی آفلاین روی یک گوشی، به‌صورت نوبتی',mode2pTitle:'دو نفره',mode2pDesc:'یک به یک — هرکس ۱۰ دیوار دارد، اول کسی که به خط مقابل برسد برنده است',mode4pTitle:'چهار نفره (دو تیم دونفره)',mode4pDesc:'دو تیم دونفره — هر بازیکن ۱۰ دیوار دارد، هر تیم باید هر دو یارش را به انتها برساند',move:'حرکت',horizontal:'دیوار افقی',vertical:'دیوار عمودی',undo:'واگرد',repeat:'تکرار',resign:'انصراف',newGame:'بازگشت به خانه',moveHistory:'تاریخچه حرکات',startGame:'یک بازی را شروع کنید',gameInfo:'اطلاعات بازی',mode:'حالت',wallsLeft:'دیوار باقی‌مانده',status:'وضعیت',objective:'هدف',walls:'دیوارها',wallsText:'• برای انتخاب دیوار، لمس کنید سپس تایید کنید.<br>• هر بازیکن ۱۰ دیوار دارد.',rules:'قوانین',rulesText:'• هیچ دیواری نباید مسیر را کاملاً ببندد.<br>• دیوارها نباید هم‌پوشانی داشته یا به‌شکل "+" با هم تلاقی کنند.',placeWall:'قرار دادن دیوار',match:'مسابقه',vs:'مقابل',gameOver:'پایان بازی',turnSuffix:' نوبت اوست',mode2p:'دو نفره',mode4p:'چهار نفره (دو تیم دونفره)',objective2p:'زودتر از حریف به سمت مقابل برسید.',objective4p:'هر دو هم‌تیمی باید زودتر از تیم مقابل به لبه‌ی هدف خود برسند.',teamA:'تیم A (قرمز/آبی)',teamB:'تیم B (سبز/زرد)',players:{player1:'بازیکن ۱ (قرمز)',player2:'بازیکن ۲ (آبی)',red:'قرمز',blue:'آبی',green:'سبز',yellow:'زرد'},teamNames:{0:'قرمز و آبی',1:'سبز و زرد'},alertPerpendicular:'دیوارها نمی‌توانند به‌صورت عمود بر هم تلاقی کنند!',alertBlocked:'این دیوار مسیر را کاملاً می‌بندد — مجاز نیست!',alertWins:'{name} برنده شد!',alertTeamWins:'تیم {team} برنده شد!',confirmResign:'{name} انصراف می‌دهد — بازی تمام شود؟',resignWinner:'{name} انصراف داد! برنده: {winner}',resignTeamWinner:'{name} انصراف داد! تیم {team} برنده شد!',confirmNewGame:'به خانه بازگردید؟ پیشرفت فعلی از بین می‌رود.',confirmRepeat:'همین بازی با همین بازیکنان دوباره تکرار شود؟',nameEntryTitle:'اسم بازیکنان را وارد کنید',startGameBtn:'شروع بازی',backBtn:'بازگشت',toastNoWalls:'دیگر دیواری برای گذاشتن ندارید!',toastWallExists:'در این محل از قبل دیوار قرار دارد.',toastInvalidMove:'نمی‌توانید به آنجا حرکت کنید.',toastNothingToUndo:'چیزی برای واگرد کردن وجود ندارد.',goWinnerLabel:'برنده',goTagWinner:'برنده',goTagLoser:'بازنده',goPlayAgain:'تکرار بازی',goBackHome:'بازگشت به خانه'}};let currentLang=localStorage.getItem('barricade-lang')||'fa';function t(key){const str=translations[currentLang][key];return(str===undefined)?translations.en[key]:str}
+const translations={en:{pageTitle:'Route 9 - Dark Mode',aboutBtn:'About',langBtn:'فارسی',aboutTitle:'About Us',aboutText:'Route 9 is an offline, pass-and-play strategy board game where players race to reach the opposite side while placing walls to slow each other down.',aboutCreatorLabel:'Created by',aboutCreatorName:'Mohammad hossein shamsi',aboutClose:'Close',startSubtitle:'Offline pass-and-play — choose a mode',howToPlay:'How to Play',mode2pTitle:'2 Player',mode2pDesc:'1v1 — each player has 10 walls, first to reach the opposite side wins',mode4pTitle:'4 Player (2v2 Teams)',mode4pDesc:'Two teams of two — each player has 10 walls, get both teammates to the finish',move:'Move',horizontal:'Horizontal',vertical:'Vertical',undo:'Undo',repeat:'Repeat',resign:'Resign',newGame:'Back to Home',moveHistory:'MOVE HISTORY',startGame:'Start a game',gameInfo:'GAME INFO',mode:'Mode',wallsLeft:'Walls Left',status:'Status',objective:'OBJECTIVE',walls:'WALLS',wallsText:'• Tap a spot to select a wall, then confirm.<br>• 10 walls per player.',rules:'RULES',rulesText:'• A wall can never fully block a path.<br>• Walls can\'t overlap or cross like a "+".',placeWall:'Place Wall',match:'MATCH',vs:'VS',gameOver:'Game Over',turnSuffix:"'s Turn",mode2p:'2 Player',mode4p:'4 Player (2v2 Teams)',objective2p:'Reach the opposite side before your opponent.',objective4p:'Get both teammates to their target edge before the other team.',teamA:'Team A (Red/Blue)',teamB:'Team B (Green/Yellow)',players:{player1:'Player 1 (Red)',player2:'Player 2 (Blue)',red:'Red',blue:'Blue',green:'Green',yellow:'Yellow'},teamNames:{0:'Red & Blue',1:'Green & Yellow'},alertPerpendicular:'Cannot intersect perpendicular walls!',alertBlocked:'This wall would completely block a path — not allowed!',alertWins:'{name} Wins!',alertTeamWins:'Team {team} Wins!',confirmResign:'{name} resigns — end the game?',resignWinner:'{name} Resigned! Winner: {winner}',resignTeamWinner:'{name} Resigned! Team {team} Wins!',confirmNewGame:'Go back to home? Current progress will be lost.',confirmRepeat:'Repeat this game with the same players?',nameEntryTitle:'Enter Player Names',startGameBtn:'Start Game',backBtn:'Back',toastNoWalls:'You have no walls left to place!',toastWallExists:'There is already a wall in this spot.',toastInvalidMove:"You can't move there.",toastNothingToUndo:'Nothing to undo yet.',goWinnerLabel:'WINNER',goTagWinner:'Winner',goTagLoser:'Loser',goPlayAgain:'Play Again',goBackHome:'Back to Home'},fa:{pageTitle:'روت ۹ - حالت تیره',aboutBtn:'درباره ما',langBtn:'English',aboutTitle:'درباره ما',aboutText:'روت ۹ یک بازی فکری آفلاین و نوبتی است که در آن بازیکنان باید زودتر از بقیه به سمت مقابل برسند و در همین حین با گذاشتن دیوار مسیر حریف را کندتر کنند.',aboutCreatorLabel:'سازنده',aboutCreatorName:'محمدحسین شمسی',aboutClose:'بستن',startSubtitle:'یک بازی آفلاین روی یک گوشی، به‌صورت نوبتی',howToPlay:'آموزش بازی',mode2pTitle:'دو نفره',mode2pDesc:'یک به یک — هرکس ۱۰ دیوار دارد، اول کسی که به خط مقابل برسد برنده است',mode4pTitle:'چهار نفره (دو تیم دونفره)',mode4pDesc:'دو تیم دونفره — هر بازیکن ۱۰ دیوار دارد، هر تیم باید هر دو یارش را به انتها برساند',move:'حرکت',horizontal:'دیوار افقی',vertical:'دیوار عمودی',undo:'واگرد',repeat:'تکرار',resign:'انصراف',newGame:'بازگشت به خانه',moveHistory:'تاریخچه حرکات',startGame:'یک بازی را شروع کنید',gameInfo:'اطلاعات بازی',mode:'حالت',wallsLeft:'دیوار باقی‌مانده',status:'وضعیت',objective:'هدف',walls:'دیوارها',wallsText:'• برای انتخاب دیوار، لمس کنید سپس تایید کنید.<br>• هر بازیکن ۱۰ دیوار دارد.',rules:'قوانین',rulesText:'• هیچ دیواری نباید مسیر را کاملاً ببندد.<br>• دیوارها نباید هم‌پوشانی داشته یا به‌شکل "+" با هم تلاقی کنند.',placeWall:'قرار دادن دیوار',match:'مسابقه',vs:'مقابل',gameOver:'پایان بازی',turnSuffix:' نوبت اوست',mode2p:'دو نفره',mode4p:'چهار نفره (دو تیم دونفره)',objective2p:'زودتر از حریف به سمت مقابل برسید.',objective4p:'هر دو هم‌تیمی باید زودتر از تیم مقابل به لبه‌ی هدف خود برسند.',teamA:'تیم A (قرمز/آبی)',teamB:'تیم B (سبز/زرد)',players:{player1:'بازیکن ۱ (قرمز)',player2:'بازیکن ۲ (آبی)',red:'قرمز',blue:'آبی',green:'سبز',yellow:'زرد'},teamNames:{0:'قرمز و آبی',1:'سبز و زرد'},alertPerpendicular:'دیوارها نمی‌توانند به‌صورت عمود بر هم تلاقی کنند!',alertBlocked:'این دیوار مسیر را کاملاً می‌بندد — مجاز نیست!',alertWins:'{name} برنده شد!',alertTeamWins:'تیم {team} برنده شد!',confirmResign:'{name} انصراف می‌دهد — بازی تمام شود؟',resignWinner:'{name} انصراف داد! برنده: {winner}',resignTeamWinner:'{name} انصراف داد! تیم {team} برنده شد!',confirmNewGame:'به خانه بازگردید؟ پیشرفت فعلی از بین می‌رود.',confirmRepeat:'همین بازی با همین بازیکنان دوباره تکرار شود؟',nameEntryTitle:'اسم بازیکنان را وارد کنید',startGameBtn:'شروع بازی',backBtn:'بازگشت',toastNoWalls:'دیگر دیواری برای گذاشتن ندارید!',toastWallExists:'در این محل از قبل دیوار قرار دارد.',toastInvalidMove:'نمی‌توانید به آنجا حرکت کنید.',toastNothingToUndo:'چیزی برای واگرد کردن وجود ندارد.',goWinnerLabel:'برنده',goTagWinner:'برنده',goTagLoser:'بازنده',goPlayAgain:'تکرار بازی',goBackHome:'بازگشت به خانه'}};let currentLang=localStorage.getItem('barricade-lang')||'fa';function t(key){const str=translations[currentLang][key];return(str===undefined)?translations.en[key]:str}
 function fmt(str,params){return str.replace(/\{(\w+)\}/g,(m,k)=>(params[k]!==undefined?params[k]:m))}
 function setTextContent(elId,text){const el=document.getElementById(elId);if(el)el.textContent=text}
 function escapeHTML(str){return String(str).replace(/[&<>"]/g,function(m){if(m==='&')return'&amp;';if(m==='<')return'&lt;';if(m==='>')return'&gt;';if(m==='"')return'&quot;';return m})}
@@ -26,7 +26,7 @@ function buildSwatches(slot){const colorContainer=document.getElementById('swatc
 function buildIcons(slot){const iconContainer=document.getElementById('icons-'+slot);if(!iconContainer)return;iconContainer.innerHTML='';if(!currentCustom[slot])currentCustom[slot]={};CUSTOM_ICONS.forEach(icon=>{const b=document.createElement('button');b.type='button';b.className='icon-btn';b.textContent=icon;b.dataset.icon=icon;b.onclick=()=>{currentCustom[slot].icon=icon;localStorage.setItem('barricade-custom-'+slot,JSON.stringify(currentCustom[slot]));refreshSwatchUI(slot)};iconContainer.appendChild(b)});refreshSwatchUI(slot)}
 function showToast(message){const container=document.getElementById('toast-container');if(!container)return;const el=document.createElement('div');el.className='toast';el.textContent=message;container.appendChild(el);requestAnimationFrame(()=>el.classList.add('show'));setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),300)},2600)}
 function setLanguage(lang){currentLang=lang;localStorage.setItem('barricade-lang',lang);applyStaticTranslations();if(appEl.classList.contains('visible')){renderTopbar();updateBtnState();updateScores();updateActivePlayerUI();updateHistory();infoMode.textContent=gameMode==='2p'?t('mode2p'):t('mode4p');infoObjective.textContent=gameMode==='2p'?t('objective2p'):t('objective4p')}}
-function applyStaticTranslations(){setTextContent('page-title',t('pageTitle'));setTextContent('about-btn-label',t('aboutBtn'));setTextContent('lang-btn-label',t('langBtn'));setTextContent('about-title',t('aboutTitle'));setTextContent('about-text',t('aboutText'));setTextContent('about-creator-label',t('aboutCreatorLabel'));setTextContent('about-creator-name',t('aboutCreatorName'));setTextContent('btn-about-close',t('aboutClose'));setTextContent('start-subtitle',t('startSubtitle'));setTextContent('mode-2p-title',t('mode2pTitle'));setTextContent('mode-2p-desc',t('mode2pDesc'));setTextContent('mode-4p-title',t('mode4pTitle'));setTextContent('mode-4p-desc',t('mode4pDesc'));setTextContent('lbl-move',t('move'));setTextContent('lbl-hwall',t('horizontal'));setTextContent('lbl-vwall',t('vertical'));setTextContent('lbl-undo',t('undo'));setTextContent('lbl-repeat',t('repeat'));setTextContent('lbl-resign',t('resign'));setTextContent('lbl-home',t('newGame'));setTextContent('go-winner-label',t('goWinnerLabel'));setTextContent('go-tag-winner',t('goTagWinner'));setTextContent('go-tag-loser',t('goTagLoser'));setTextContent('lbl-go-repeat',t('goPlayAgain'));setTextContent('lbl-go-home',t('goBackHome'));setTextContent('lbl-move-history',t('moveHistory'));setTextContent('lbl-game-info',t('gameInfo'));setTextContent('lbl-mode',t('mode'));setTextContent('lbl-walls-left',t('wallsLeft'));setTextContent('lbl-status',t('status'));setTextContent('lbl-objective',t('objective'));setTextContent('lbl-walls',t('walls'));document.getElementById('info-walls-text').innerHTML=t('wallsText');setTextContent('lbl-rules',t('rules'));document.getElementById('info-rules-text').innerHTML=t('rulesText');setTextContent('lbl-place-wall',t('placeWall'));const startLbl=document.getElementById('lbl-start-game');if(startLbl)startLbl.textContent=t('startGame');setTextContent('name-entry-title',t('nameEntryTitle'));setTextContent('btn-name-confirm',t('startGameBtn'));setTextContent('btn-name-back',t('backBtn'));document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='fa'?'rtl':'ltr';updateLangSwitch()}
+function applyStaticTranslations(){setTextContent('page-title',t('pageTitle'));setTextContent('about-btn-label',t('aboutBtn'));setTextContent('lang-btn-label',t('langBtn'));setTextContent('about-title',t('aboutTitle'));setTextContent('about-text',t('aboutText'));setTextContent('about-creator-label',t('aboutCreatorLabel'));setTextContent('about-creator-name',t('aboutCreatorName'));setTextContent('btn-about-close',t('aboutClose'));setTextContent('start-subtitle',t('startSubtitle'));setTextContent('lbl-help',t('howToPlay'));setTextContent('mode-2p-title',t('mode2pTitle'));setTextContent('mode-2p-desc',t('mode2pDesc'));setTextContent('mode-4p-title',t('mode4pTitle'));setTextContent('mode-4p-desc',t('mode4pDesc'));setTextContent('lbl-move',t('move'));setTextContent('lbl-hwall',t('horizontal'));setTextContent('lbl-vwall',t('vertical'));setTextContent('lbl-undo',t('undo'));setTextContent('lbl-repeat',t('repeat'));setTextContent('lbl-resign',t('resign'));setTextContent('lbl-home',t('newGame'));setTextContent('go-winner-label',t('goWinnerLabel'));setTextContent('go-tag-winner',t('goTagWinner'));setTextContent('go-tag-loser',t('goTagLoser'));setTextContent('lbl-go-repeat',t('goPlayAgain'));setTextContent('lbl-go-home',t('goBackHome'));setTextContent('lbl-move-history',t('moveHistory'));setTextContent('lbl-game-info',t('gameInfo'));setTextContent('lbl-mode',t('mode'));setTextContent('lbl-walls-left',t('wallsLeft'));setTextContent('lbl-status',t('status'));setTextContent('lbl-objective',t('objective'));setTextContent('lbl-walls',t('walls'));document.getElementById('info-walls-text').innerHTML=t('wallsText');setTextContent('lbl-rules',t('rules'));document.getElementById('info-rules-text').innerHTML=t('rulesText');setTextContent('lbl-place-wall',t('placeWall'));const startLbl=document.getElementById('lbl-start-game');if(startLbl)startLbl.textContent=t('startGame');setTextContent('name-entry-title',t('nameEntryTitle'));setTextContent('btn-name-confirm',t('startGameBtn'));setTextContent('btn-name-back',t('backBtn'));document.documentElement.lang=currentLang;document.documentElement.dir=currentLang==='fa'?'rtl':'ltr';updateLangSwitch()}
 function updateLangSwitch(){const sw=document.getElementById('lang-switch');if(!sw)return;sw.dataset.active=currentLang;const faBtn=document.getElementById('lang-opt-fa'),enBtn=document.getElementById('lang-opt-en');if(faBtn)faBtn.classList.toggle('active',currentLang==='fa');if(enBtn)enBtn.classList.toggle('active',currentLang==='en')}
 const langOptFa=document.getElementById('lang-opt-fa'),langOptEn=document.getElementById('lang-opt-en');if(langOptFa)langOptFa.onclick=()=>setLanguage('fa');if(langOptEn)langOptEn.onclick=()=>setLanguage('en');updateLangSwitch();document.getElementById('btn-about').onclick=()=>document.getElementById('about-overlay').classList.add('visible');document.getElementById('btn-about-close').onclick=()=>document.getElementById('about-overlay').classList.remove('visible');document.getElementById('about-overlay').addEventListener('click',(e)=>{if(e.target.id==='about-overlay')e.target.classList.remove('visible');});applyStaticTranslations();['p1','p2','red','blue','green','yellow'].forEach(buildSwatches);['p1','p2','red','blue','green','yellow'].forEach(buildIcons);function setup2P(){players=[{id:0,name:'Player 1 (Red)',customName:currentNames.p1,color:customColor('p1'),colorB:customColorB('p1'),gradient:customGradientEnabled('p1'),icon:customIcon('p1'),colorClass:'red',row:8,col:4,walls:10,target:'row0',team:0,finished:!1},{id:1,name:'Player 2 (Blue)',customName:currentNames.p2,color:customColor('p2'),colorB:customColorB('p2'),gradient:customGradientEnabled('p2'),icon:customIcon('p2'),colorClass:'blue',row:0,col:4,walls:10,target:'row8',team:1,finished:!1},];turnOrder=[0,1]}
 function setup4P(){players=[{id:0,name:'Red',customName:currentNames.red,color:customColor('red'),colorB:customColorB('red'),gradient:customGradientEnabled('red'),icon:customIcon('red'),colorClass:'red',row:0,col:2,walls:10,target:'row8',team:0,finished:!1},{id:1,name:'Blue',customName:currentNames.blue,color:customColor('blue'),colorB:customColorB('blue'),gradient:customGradientEnabled('blue'),icon:customIcon('blue'),colorClass:'blue',row:0,col:6,walls:10,target:'row8',team:0,finished:!1},{id:2,name:'Green',customName:currentNames.green,color:customColor('green'),colorB:customColorB('green'),gradient:customGradientEnabled('green'),icon:customIcon('green'),colorClass:'green',row:8,col:2,walls:10,target:'row0',team:1,finished:!1},{id:3,name:'Yellow',customName:currentNames.yellow,color:customColor('yellow'),colorB:customColorB('yellow'),gradient:customGradientEnabled('yellow'),icon:customIcon('yellow'),colorClass:'yellow',row:8,col:6,walls:10,target:'row0',team:1,finished:!1},];turnOrder=[0,2,1,3]}
@@ -35,12 +35,6 @@ return dict[p.colorClass]||p.name}
 function teamName(team){return translations[currentLang].teamNames[team]}
 function currentPlayer(){return players[turn]}
 function initGame(mode){gameMode=mode;if(mode==='2p')setup2P();else setup4P();hWalls=Array.from({length:9},()=>Array(9).fill(!1));vWalls=Array.from({length:9},()=>Array(9).fill(!1));turnIndex=0;turn=turnOrder[0];gameOver=!1;history=[];undoStack=[];currentPage=0;uiMode='move';wallPreviewPos=null;pendingWallPos=null;isAnimating=!1;animData=null;wallAnimation=null;hideWallConfirm();infoMode.textContent=mode==='2p'?t('mode2p'):t('mode4p');infoObjective.textContent=mode==='2p'?t('objective2p'):t('objective4p');renderTopbar();updateBtnState();updateScores();updateActivePlayerUI();updateHistory();draw();startOverlay.style.display='none';appEl.classList.add('visible');
-// ===== اضافه شده برای مخفی کردن آسمان =====
-const starsContainer = document.getElementById('stars-container');
-if (starsContainer) {
-    starsContainer.style.display = 'none';
-}
-// =========================================
 sfxGameStart()}
 document.getElementById('btn-start-2p').onclick=()=>showNameEntry('2p');document.getElementById('btn-start-4p').onclick=()=>showNameEntry('4p');function showNameEntry(mode){selectedMode=mode;document.getElementById('mode-select-view').style.display='none';document.getElementById('name-entry-view').style.display='block';document.getElementById('name-fields-2p').style.display=mode==='2p'?'block':'none';document.getElementById('name-fields-4p').style.display=mode==='4p'?'block':'none';document.getElementById('input-name-p1').value=currentNames.p1;document.getElementById('input-name-p2').value=currentNames.p2;document.getElementById('input-name-red').value=currentNames.red;document.getElementById('input-name-blue').value=currentNames.blue;document.getElementById('input-name-green').value=currentNames.green;document.getElementById('input-name-yellow').value=currentNames.yellow;['p1','p2','red','blue','green','yellow'].forEach(refreshSwatchUI);applyStaticTranslations()}
 document.getElementById('btn-name-back').onclick=()=>{document.getElementById('name-entry-view').style.display='none';document.getElementById('mode-select-view').style.display='block'};document.getElementById('btn-name-confirm').onclick=()=>{if(selectedMode==='2p'){currentNames.p1=document.getElementById('input-name-p1').value.trim();currentNames.p2=document.getElementById('input-name-p2').value.trim();localStorage.setItem('barricade-name-p1',currentNames.p1);localStorage.setItem('barricade-name-p2',currentNames.p2)}else{currentNames.red=document.getElementById('input-name-red').value.trim();currentNames.blue=document.getElementById('input-name-blue').value.trim();currentNames.green=document.getElementById('input-name-green').value.trim();currentNames.yellow=document.getElementById('input-name-yellow').value.trim();localStorage.setItem('barricade-name-red',currentNames.red);localStorage.setItem('barricade-name-blue',currentNames.blue);localStorage.setItem('barricade-name-green',currentNames.green);localStorage.setItem('barricade-name-yellow',currentNames.yellow)}
@@ -98,7 +92,7 @@ function drawPiece(player, isAnimatingPiece){
 
     ctx.save();
     ctx.shadowColor = player.color;
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 9;
 
     // رنگ‌بندی گرادیان
     let grad = ctx.createLinearGradient(cx, cy, cx + size, cy + size);
@@ -146,14 +140,7 @@ function showGameOverDialog(winnerPlayer,loserPlayer,winnerTeam){let winnerLabel
 goWinnerName.textContent=winnerLabel;goWinnerName.className='go-winner-name '+winnerColorClass;goWinnerName.style.color=winnerColor;goNameWinner.textContent=winnerLabel;goNameLoser.textContent=loserLabel;gameOverOverlay.classList.add('visible');sfxWin()}
 function hideGameOverOverlay(){gameOverOverlay.classList.remove('visible')}
 function restartSameGame(){hideGameOverOverlay();initGame(gameMode)}
-function goHome(){hideGameOverOverlay();document.getElementById('name-entry-view').style.display='none';document.getElementById('mode-select-view').style.display='block';startOverlay.style.display='flex';appEl.classList.remove('visible');
-// ===== اضافه شده برای نمایش مجدد آسمان =====
-const starsContainer = document.getElementById('stars-container');
-if (starsContainer) {
-    starsContainer.style.display = 'block'; // یا ''
-}
-// ==========================================
-}
+function goHome(){hideGameOverOverlay();document.getElementById('name-entry-view').style.display='none';document.getElementById('mode-select-view').style.display='block';startOverlay.style.display='flex';appEl.classList.remove('visible')}
 btnGoRepeat.onclick=restartSameGame;btnGoHome.onclick=goHome;function advanceTurn(){if(gameOver)return;let attempts=0;const allFinished=players.every(p=>p.finished);if(allFinished)return;do{turnIndex=(turnIndex+1)%turnOrder.length;attempts++}while(players[turnOrder[turnIndex]].finished&&attempts<=turnOrder.length);turn=turnOrder[turnIndex]}
 function updateActivePlayerUI(){for(const p of players){const card=document.getElementById(`p${p.id}-card`);if(!card)continue;card.classList.toggle('active',p.id===turn&&!gameOver);card.classList.toggle('finished',p.finished)}
 const player=currentPlayer();if(player){statusText.textContent=gameOver?t('gameOver'):`${playerDisplayName(player)}${t('turnSuffix')}`;statusText.className=gameOver?'':`text-${player.colorClass}`;statusText.style.color=gameOver?'':player.color;infoWalls.textContent=`${player.walls} / 10`}}
@@ -183,138 +170,3 @@ if(!pendingWallPos||pendingWallPos.row!==snap.row||pendingWallPos.col!==snap.col
 canvas.addEventListener('mousemove',(e)=>{if(gameOver||isAnimating)return;if(uiMode!=='move'&&!pendingWallPos){wallPreviewPos=getWallSnap(e)||null;draw()}});canvas.addEventListener('mousedown',(e)=>{if(gameOver||isAnimating)return;if(uiMode==='move'){const pos=getCellFromEvent(e);if(!pos)return;let col=Math.floor(pos.x/cellSize);let row=Math.floor(pos.y/cellSize);executeMove(row,col)}else{handleWallTap(e)}});canvas.addEventListener('mouseleave',()=>{if(!pendingWallPos){wallPreviewPos=null;draw()}});canvas.addEventListener('touchmove',(e)=>{e.preventDefault();if(gameOver||isAnimating)return;const touch=e.touches[0];if(uiMode!=='move'&&!pendingWallPos){wallPreviewPos=getWallSnap(touch)||null;draw()}},{passive:!1});canvas.addEventListener('touchend',(e)=>{e.preventDefault();if(gameOver||isAnimating)return;const touch=e.changedTouches[0];if(uiMode==='move'){const pos=getCellFromEvent(touch);if(!pos)return;let col=Math.floor(pos.x/cellSize);let row=Math.floor(pos.y/cellSize);executeMove(row,col)}else{handleWallTap(touch)}
 if(!pendingWallPos)wallPreviewPos=null;draw()},{passive:!1});btnMove.onclick=()=>{uiMode='move';wallPreviewPos=null;pendingWallPos=null;hideWallConfirm();updateBtnState();draw()};btnHWall.onclick=()=>{uiMode=(uiMode==='hwall'?'move':'hwall');wallPreviewPos=null;pendingWallPos=null;hideWallConfirm();updateBtnState();draw()};btnVWall.onclick=()=>{uiMode=(uiMode==='vwall'?'move':'vwall');wallPreviewPos=null;pendingWallPos=null;hideWallConfirm();updateBtnState();draw()};function animateLoop(){if(!isAnimating&&!gameOver&&uiMode==='move')draw();if(pendingWallPos&&!isAnimating)draw();requestAnimationFrame(animateLoop)}
 animateLoop()})()
-// ================================================================
-// تابع ایجاد آسمان پرستاره با حرکت بی‌پایان (Space Scroller)
-// ================================================================
-// ================================================================
-// تابع ایجاد آسمان پرستاره با افکت‌های حرفه‌ای
-// ================================================================
-function initStarfield() {
-    // حذف کانتینر قبلی اگر وجود داشته باشد
-    const existing = document.getElementById('stars-container');
-    if (existing) existing.remove();
-
-    const container = document.createElement('div');
-    container.id = 'stars-container';
-    document.body.prepend(container);
-
-    // 1. لایه سحابی‌های رنگی (Nebula)
-    const nebulaLayer = document.createElement('div');
-    nebulaLayer.id = 'nebula-layer';
-    container.appendChild(nebulaLayer);
-
-    const nebulaColors = [
-        'rgba(255, 100, 150, 0.25)',
-        'rgba(100, 150, 255, 0.25)',
-        'rgba(255, 200, 100, 0.25)',
-        'rgba(200, 100, 255, 0.25)'
-    ];
-
-    for (let i = 0; i < 5; i++) {
-        const cloud = document.createElement('div');
-        cloud.className = 'nebula-cloud';
-        const size = 200 + Math.random() * 400;
-        cloud.style.width = size + 'px';
-        cloud.style.height = size + 'px';
-        cloud.style.background = nebulaColors[i % nebulaColors.length];
-        cloud.style.left = Math.random() * 80 + '%';
-        cloud.style.top = Math.random() * 80 + '%';
-        cloud.style.animationDelay = Math.random() * 20 + 's';
-        cloud.style.animationDuration = 30 + Math.random() * 30 + 's';
-        nebulaLayer.appendChild(cloud);
-    }
-
-    // 2. لایه غبار کیهانی (Dust)
-    const dustLayer = document.createElement('div');
-    dustLayer.id = 'dust-layer';
-    container.appendChild(dustLayer);
-
-    for (let i = 0; i < 80; i++) {
-        const dust = document.createElement('div');
-        dust.className = 'dust-particle';
-        const size = 2 + Math.random() * 6;
-        dust.style.width = size + 'px';
-        dust.style.height = size + 'px';
-        dust.style.left = Math.random() * 100 + '%';
-        dust.style.top = Math.random() * 100 + '%';
-        dust.style.background = `rgba(255,255,255,${0.1 + Math.random() * 0.3})`;
-        dust.style.animation = `floatDust ${10 + Math.random() * 20}s linear infinite alternate`;
-        dust.style.animationDelay = Math.random() * 10 + 's';
-        dustLayer.appendChild(dust);
-    }
-
-    // اضافه کردن keyframe برای حرکت غبار (اگر وجود نداشته باشد)
-    const dustStyle = document.createElement('style');
-    dustStyle.textContent = `
-        @keyframes floatDust {
-            0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
-            100% { transform: translate(${20 + Math.random() * 40}px, ${-10 + Math.random() * 20}px) scale(1.4); opacity: 0.6; }
-        }
-    `;
-    document.head.appendChild(dustStyle);
-
-    // 3. لایه شهاب‌واره‌ها (Shooting Stars)
-    const shootingStarContainer = document.createElement('div');
-    shootingStarContainer.id = 'shooting-star-container';
-    container.appendChild(shootingStarContainer);
-
-    function createShootingStar() {
-        const star = document.createElement('div');
-        star.className = 'shooting-star';
-        const startX = Math.random() * 80 + 10;
-        const startY = Math.random() * 40 + 5;
-        star.style.left = startX + '%';
-        star.style.top = startY + '%';
-        star.style.transform = `rotate(${-20 + Math.random() * 30}deg)`;
-        star.style.opacity = '1';
-        const duration = 1 + Math.random() * 2;
-        star.style.animation = `shoot ${duration}s ease-out forwards`;
-        shootingStarContainer.appendChild(star);
-        setTimeout(() => star.remove(), duration * 1000);
-    }
-
-    // تولید شهاب‌واره به‌صورت تصادفی
-    setInterval(() => {
-        if (Math.random() < 0.3) {
-            createShootingStar();
-        }
-    }, 2000);
-
-    // اضافه کردن keyframe برای حرکت شهاب‌واره
-    const shootStyle = document.createElement('style');
-    shootStyle.textContent = `
-        @keyframes shoot {
-            0% { opacity: 0; transform: translate(0, 0) rotate(-25deg); }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; transform: translate(-200px, 200px) rotate(-25deg); }
-        }
-    `;
-    document.head.appendChild(shootStyle);
-
-    // 4. ستاره‌های چشمک‌زن (Twinkling Stars)
-    const numStars = 300;
-    for (let i = 0; i < numStars; i++) {
-        const star = document.createElement('div');
-        const sizeRand = Math.random();
-        let className = 'star';
-        if (sizeRand < 0.7) className += ' star-small';
-        else if (sizeRand < 0.9) className += ' star-medium';
-        else className += ' star-large';
-
-        // ۲۰٪ شانس رنگ متفاوت
-        if (Math.random() < 0.2) {
-            className += Math.random() < 0.5 ? ' star-color-blue' : ' star-color-yellow';
-        }
-
-        star.className = className;
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.animationDelay = Math.random() * 5 + 's';
-        star.style.animationDuration = (2 + Math.random() * 4) + 's';
-        container.appendChild(star);
-    }
-}
-
-// اجرای تابع برای نمایش آسمان
-initStarfield();
