@@ -5,6 +5,7 @@ body{padding:66px 20px 40px}
 .help-top{position:fixed;top:14px;left:14px;z-index:250}
 .back-btn{display:flex;align-items:center;gap:6px;background:var(--card-bg);border:1px solid var(--border-color);color:var(--text-main);border-radius:20px;padding:8px 14px;font-size:12.5px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgb(0 0 0/.35);transition:all 0.2s ease}
 .back-btn:hover{border-color:#4a5a6b;background:#20272f}
+.back-btn:active{transform:scale(.96)}
 .help-header{text-align:center;margin-top:10px}
 .help-header h1{margin:0 0 8px;font-size:26px}
 .help-header p{color:var(--text-muted);font-size:13.5px;margin:0;line-height:1.6}
@@ -15,19 +16,14 @@ body{padding:66px 20px 40px}
 .step-body p{margin:0 0 14px;font-size:13px;line-height:1.7;color:#c0c9d6}
 .step-diagram{background:#0c1015;border:1px solid var(--border-color);border-radius:12px;padding:14px;display:flex;justify-content:center}
 .step-diagram svg{max-width:100%;height:auto}
-.cta-row{text-align:center;margin-top:6px}
-.cta-row a{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:13px 26px;border-radius:12px;transition:all .2s ease}
-.cta-row a:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgb(46 204 113/.4)}
-html[dir="ltr"] .help-top{left:auto;right:14px}
-html[dir="ltr"] .back-btn svg{transform:scaleX(-1)}
 </style>
 </head><body>
 <div class="help-top"><a href="index.html" class="back-btn"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg><span id="lbl-back">Back</span></a></div>
-<div id="top-controls" style="left:14px;right:auto"><div class="lang-switch" id="lang-switch"><button type="button" class="lang-opt" id="lang-opt-fa" data-lang="fa">فا</button><button type="button" class="lang-opt" id="lang-opt-en" data-lang="en">EN</button><span class="lang-slider" id="lang-slider"></span></div></div>
+<div id="top-controls"><div class="lang-switch" id="lang-switch"><button type="button" class="lang-opt" id="lang-opt-fa" data-lang="fa">فا</button><button type="button" class="lang-opt" id="lang-opt-en" data-lang="en">EN</button><span class="lang-slider" id="lang-slider"></span></div></div>
 
 <div class="help-wrap">
   <div class="help-header">
-    <h1 id="h-title">آموزش بازی روت ۹</h1>
+    <h1 id="h-title">آموزش بازی مسیر ۹</h1>
     <p id="h-sub">در چند قدم ساده یاد بگیرید چطور بازی کنید</p>
   </div>
 
@@ -133,26 +129,22 @@ html[dir="ltr"] .back-btn svg{transform:scaleX(-1)}
       </div>
     </div>
   </div>
-
-  <div class="cta-row"><a href="index.html" id="lbl-cta"><svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 3v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3M4 21v-5h5"/></svg><span>شروع بازی</span></a></div>
 </div>
 
 <script>
 const T={
-fa:{title:'آموزش بازی روت ۹',back:'بازگشت',sub:'در چند قدم ساده یاد بگیرید چطور بازی کنید',
+fa:{title:'آموزش بازی مسیر ۹',back:'بازگشت',sub:'در چند قدم ساده یاد بگیرید چطور بازی کنید',
 s1t:'هدف بازی',s1d:'هر بازیکن باید مهره‌ی خودش را از یک طرف صفحه به طرف مقابل برساند. اولین کسی که برسد، برنده است.',
 s2t:'حرکت مهره',s2d:'با انتخاب حالت «حرکت»، روی یکی از خانه‌های مجاور مهره‌ی خود ضربه بزنید تا مهره به آن سمت جابه‌جا شود.',
 s3t:'گذاشتن دیوار',s3d:'با انتخاب حالت «افقی» یا «عمودی»، روی صفحه ضربه بزنید تا دیوار پیش‌نمایش داده شود، سپس با دکمه‌ی تأیید آن را قرار دهید. هر بازیکن ۱۰ دیوار دارد و می‌تواند مسیر حریف را کندتر کند.',
 s4t:'قانون مهم دیوارها',s4d:'دیوارها نباید هم‌پوشانی داشته باشند یا به‌شکل «+» با هم تلاقی کنند، و هیچ دیواری نباید مسیر هیچ بازیکنی را به‌طور کامل ببندد؛ همیشه باید حداقل یک راه باز بماند.',
-s5t:'نوبت‌ها و برنده شدن',s5d:'بازیکنان به‌نوبت حرکت می‌کنند یا دیوار می‌گذارند. در حالت دو نفره، اولین نفری که به خط مقابل برسد برنده است. در حالت چهار نفره، هر تیم باید هر دو بازیکنش را به لبه‌ی هدف برساند.',
-cta:'شروع بازی'},
+s5t:'نوبت‌ها و برنده شدن',s5d:'بازیکنان به‌نوبت حرکت می‌کنند یا دیوار می‌گذارند. در حالت دو نفره، اولین نفری که به خط مقابل برسد برنده است. در حالت چهار نفره، هر تیم باید هر دو بازیکنش را به لبه‌ی هدف برساند.'},
 en:{title:'How to Play Route 9',back:'Back',sub:'Learn to play in a few simple steps',
 s1t:'Objective',s1d:'Each player must get their piece from one side of the board to the opposite side. First to arrive wins.',
 s2t:'Moving your piece',s2d:'Select "Move" mode, then tap a cell next to your piece to move there.',
 s3t:'Placing walls',s3d:'Select "Horizontal" or "Vertical" mode, tap the board to preview a wall, then confirm to place it. Each player has 10 walls to slow the opponent down.',
 s4t:'The key wall rule',s4d:'Walls cannot overlap or cross like a "+", and no wall may ever fully block any player\'s path — there must always be at least one way through.',
-s5t:'Turns and winning',s5d:'Players take turns moving or placing a wall. In 2-player mode, the first to reach the opposite side wins. In 4-player mode, each team must get both its players to their target edge.',
-cta:'Start Playing'}
+s5t:'Turns and winning',s5d:'Players take turns moving or placing a wall. In 2-player mode, the first to reach the opposite side wins. In 4-player mode, each team must get both its players to their target edge.'}
 };
 function apply(lang){
   const d=T[lang];
@@ -167,7 +159,6 @@ function apply(lang){
   document.getElementById('s3-t').textContent=d.s3t;document.getElementById('s3-d').textContent=d.s3d;
   document.getElementById('s4-t').textContent=d.s4t;document.getElementById('s4-d').textContent=d.s4d;
   document.getElementById('s5-t').textContent=d.s5t;document.getElementById('s5-d').textContent=d.s5d;
-  document.querySelector('#lbl-cta span').textContent=d.cta;
   document.getElementById('lang-opt-fa').classList.toggle('active',lang==='fa');
   document.getElementById('lang-opt-en').classList.toggle('active',lang==='en');
   document.getElementById('lang-switch').setAttribute('data-active',lang);
