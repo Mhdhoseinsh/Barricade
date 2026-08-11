@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <title>Route 9 - Multiplayer</title>
-    <!-- کتابخانه PeerJS برای ارتباط مستقیم -->
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <style>
         :root {
@@ -53,8 +52,6 @@
         .score-bar .fill { height: 100%; border-radius: 4px; transition: width 0.5s ease }
         .fill.red { background: var(--red-color) }
         .fill.blue { background: var(--blue-color) }
-        .fill.green { background: var(--green-color) }
-        .fill.yellow { background: var(--yellow-color) }
         .bet-box { text-align: center; background: #0c1015; padding: 4px 25px; border-radius: 12px; border: 1px solid #252e39 }
         .bet-box .label { font-size: 10px; color: var(--text-muted); letter-spacing: 1px }
         .bet-box .amount { font-size: 15px; font-weight: 700; color: #facc15; display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 2px }
@@ -264,7 +261,7 @@
         let peer = null;
         let conn = null;
         let isConnected = false;
-        let gameStarted = false; // برای جلوگیری از نمایش دوباره
+        let gameStarted = false; 
 
         // ** متغیرهای اصلی بازی **
         const canvas = document.getElementById('boardCanvas');
@@ -287,8 +284,6 @@
         let wallPreviewPos = null;
         let pendingWallPos = null;
         let isAnimating = false;
-        let animData = null;
-        let wallAnimation = null;
         let currentPage = 0;
         const ITEMS_PER_PAGE = 8;
 
@@ -310,8 +305,10 @@
                 hWalls: hWalls,
                 vWalls: vWalls,
                 turnIndex: turnIndex,
+                turnOrder: turnOrder, // کلید جدید
                 gameOver: gameOver,
-                history: history
+                history: history,
+                gameMode: gameMode
             };
             sendToPeer({ type: 'state_update', state: state });
         }
@@ -321,9 +318,14 @@
             hWalls = state.hWalls;
             vWalls = state.vWalls;
             turnIndex = state.turnIndex;
+            turnOrder = state.turnOrder || [0, 1]; // دریافت آرایه نوبت‌ها
             gameOver = state.gameOver;
-            history = state.history;
+            history = state.history || [];
+            gameMode = state.gameMode || '2p';
+            
+            // تنظیم نوبت بر اساس ایندکس
             turn = turnOrder[turnIndex];
+            
             renderTopbar();
             updateScores();
             updateActivePlayerUI();
@@ -334,7 +336,6 @@
 
         function handleIncomingData(data) {
             if (data.type === 'state_update') {
-                // اگر بازی هنوز شروع نشده، صفحه شروع را مخفی کن و بازی را نشان بده
                 if (!gameStarted) {
                     showGame();
                 }
@@ -407,7 +408,7 @@
             updateActivePlayerUI();
             updateHistory();
             draw();
-            showGame(); // نمایش بازی
+            showGame();
         }
 
         function renderTopbar() {
@@ -590,12 +591,12 @@
             const backupV = vWalls.map(a => [...a]);
             try {
                 if (pos.mode === 'hwall') {
-                    if (vWalls[pos.row][pos.col] && vWalls[pos.row+1][pos.col]) throw 'تداخل';
-                    if (hWalls[pos.row][pos.col] || hWalls[pos.row][pos.col+1]) throw 'تکراری';
+                    if (vWalls[pos.row][pos.col] && vWalls[pos.row+1][pos.col]) throw 'تداخل عمودی';
+                    if (hWalls[pos.row][pos.col] || hWalls[pos.row][pos.col+1]) throw 'دیوار تکراری';
                     hWalls[pos.row][pos.col] = true; hWalls[pos.row][pos.col+1] = true;
                 } else {
-                    if (hWalls[pos.row][pos.col] && hWalls[pos.row][pos.col+1]) throw 'تداخل';
-                    if (vWalls[pos.row][pos.col] || vWalls[pos.row+1][pos.col]) throw 'تکراری';
+                    if (hWalls[pos.row][pos.col] && hWalls[pos.row][pos.col+1]) throw 'تداخل افقی';
+                    if (vWalls[pos.row][pos.col] || vWalls[pos.row+1][pos.col]) throw 'دیوار تکراری';
                     vWalls[pos.row][pos.col] = true; vWalls[pos.row+1][pos.col] = true;
                 }
                 if (players.some(p => !p.finished && !canReachTarget(p))) {
@@ -637,6 +638,7 @@
             if (!getValidMoves(player).some(m => m[0]===row && m[1]===col)) { showToast('حرکت نامعتبر!'); return; }
             if (!isHost) {
                 sendToPeer({ type: 'move_request', playerId: player.id, row, col });
+                showToast('درخواست حرکت ارسال شد... منتظر تایید');
                 return;
             }
             performMove(row, col);
@@ -648,6 +650,7 @@
             if (player.walls <= 0) { showToast('دیوار تمام شد!'); pendingWallPos = null; hideWallConfirm(); draw(); return; }
             if (!isHost) {
                 sendToPeer({ type: 'wall_request', playerId: player.id, pos: pendingWallPos });
+                showToast('درخواست دیوار ارسال شد... منتظر تایید');
                 pendingWallPos = null; hideWallConfirm(); draw(); return;
             }
             performWallPlacement();
@@ -687,7 +690,7 @@
             setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, 2600);
         }
 
-        // ** رویدادهای UI **
+        // ** رویدادهای UI (اتصال) **
         document.getElementById('btn-host').onclick = function() {
             const room = document.getElementById('room-code').value.trim() || 'route9-default';
             isHost = true;
@@ -703,8 +706,12 @@
                 conn.on('data', handleIncomingData);
                 isConnected = true;
                 document.getElementById('room-status').textContent = 'مهمان متصل شد! شروع بازی...';
-                initGame();
-                broadcastState();
+                
+                // حل مشکل: صبر می‌کنیم تا اتصال کاملاً آماده شود و سپس بازی را شروع می‌کنیم
+                conn.on('open', () => {
+                    initGame();
+                    broadcastState();
+                });
             });
             peer.on('error', (err) => {
                 document.getElementById('room-status').textContent = 'خطا: ' + err.message;
@@ -840,4 +847,4 @@
     })();
     </script>
 </body>
-    </html>
+</html>
