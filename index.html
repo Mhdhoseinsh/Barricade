@@ -264,6 +264,7 @@
         let peer = null;
         let conn = null;
         let isConnected = false;
+        let gameStarted = false; // برای جلوگیری از نمایش دوباره
 
         // ** متغیرهای اصلی بازی **
         const canvas = document.getElementById('boardCanvas');
@@ -333,6 +334,10 @@
 
         function handleIncomingData(data) {
             if (data.type === 'state_update') {
+                // اگر بازی هنوز شروع نشده، صفحه شروع را مخفی کن و بازی را نشان بده
+                if (!gameStarted) {
+                    showGame();
+                }
                 applyReceivedState(data.state);
             }
             else if (data.type === 'move_request' && isHost) {
@@ -356,9 +361,19 @@
                 handleResign();
             }
             else if (data.type === 'game_over') {
+                if (!gameStarted) showGame();
                 applyReceivedState(data.state);
                 setTimeout(() => showGameOverDialog(), 100);
             }
+        }
+
+        // ** توابع نمایش بازی **
+        function showGame() {
+            if (gameStarted) return;
+            gameStarted = true;
+            document.getElementById('start-overlay').style.display = 'none';
+            document.getElementById('app').classList.add('visible');
+            document.getElementById('top-controls').style.display = 'none';
         }
 
         // ** توابع اصلی بازی **
@@ -392,9 +407,7 @@
             updateActivePlayerUI();
             updateHistory();
             draw();
-            document.getElementById('start-overlay').style.display = 'none';
-            document.getElementById('app').classList.add('visible');
-            document.getElementById('top-controls').style.display = 'none';
+            showGame(); // نمایش بازی
         }
 
         function renderTopbar() {
@@ -827,4 +840,4 @@
     })();
     </script>
 </body>
-</html>
+    </html>
