@@ -3455,7 +3455,13 @@
                     onlineState.peer.on('connection', (conn) => {
                         if (onlineState.conn) { try { conn.close() } catch (e) {} return }
                         onlineState.conn = conn;
-                        setupOnlineConnection(!0)
+                        attachConnListeners(conn);
+                        conn.on('open', () => {
+                            onlineStatusText.textContent = omsg('حریف متصل شد!', 'Opponent connected!');
+                            onlineState.localPlayerId = 0;
+                            sendOnline({ type: 'start', mode: onlineState.mode });
+                            beginOnlineGame(onlineState.mode)
+                        })
                     })
                 })
             };
@@ -3487,18 +3493,19 @@
                 startPeer(null, () => {
                     const conn = onlineState.peer.connect('route9-' + raw, { reliable: !0 });
                     onlineState.conn = conn;
+                    attachConnListeners(conn);
                     let settled = !1;
-                    conn.on('open', () => { settled = !0; setupOnlineConnection(!1) });
+                    conn.on('open', () => {
+                        settled = !0;
+                        onlineJoinStatus.textContent = omsg('متصل شد! در انتظار شروع بازی...', 'Connected! Waiting for the game to start...')
+                    });
                     setTimeout(() => {
                         if (!settled) onlineJoinStatus.textContent = omsg('اتصال برقرار نشد. کد را بررسی کن.', 'Could not connect. Check the code.')
                     }, 12000)
                 })
             };
 
-            function setupOnlineConnection(isHost) {
-                const conn = onlineState.conn;
-                onlineJoinStatus.textContent = omsg('متصل شد!', 'Connected!');
-                onlineStatusText.textContent = omsg('حریف متصل شد!', 'Opponent connected!');
+            function attachConnListeners(conn) {
                 conn.on('data', handleOnlineData);
                 conn.on('close', () => {
                     if (onlineState.active) {
@@ -3506,12 +3513,7 @@
                         teardownOnline(!1);
                         goHome()
                     }
-                });
-                if (isHost) {
-                    onlineState.localPlayerId = 0;
-                    sendOnline({ type: 'start', mode: onlineState.mode });
-                    beginOnlineGame(onlineState.mode)
-                }
+                })
             }
 
             function beginOnlineGame(mode) {
@@ -4354,6 +4356,8 @@
                 startOverlay.style.display = 'none';
                 appEl.classList.add('visible');
                 setThemeColor('#000000');
+                btnHome.style.display = onlineState.active ? 'none' : '';
+                btnUndo.style.display = onlineState.active ? 'none' : '';
                 const topCtrls = document.getElementById('top-controls');
                 if (topCtrls) topCtrls.style.display = 'none';
                 const soundBtnHeader = document.getElementById('btn-sound-board');
