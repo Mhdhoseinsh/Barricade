@@ -627,46 +627,31 @@
         .board-wrapper::after {
             right: 15px
         }
-        .online-turn-indicator {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 6px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            border: 1px solid var(--border-color);
-            font-size: 10.5px;
-            font-weight: 700;
-            letter-spacing: .2px;
-            white-space: nowrap;
-            transition: border-color .25s ease, color .25s ease
-        }
-        .online-turn-indicator .otb-dot {
+        #online-turn-row .otb-dot {
+            display: inline-block;
             width: 7px;
             height: 7px;
             border-radius: 50%;
-            flex-shrink: 0
+            margin-inline-end: 6px;
+            vertical-align: middle
         }
-        .online-turn-indicator.otb-mine {
-            border-color: rgba(46,204,113,.55);
-            color: #7CF0A6
+        #online-turn-row.otb-mine span:last-child {
+            color: #2ECC71
         }
-        .online-turn-indicator.otb-mine .otb-dot {
+        #online-turn-row.otb-mine .otb-dot {
             background: #2ECC71;
             animation: otbPulseGreen 1.4s ease-out infinite
         }
-        .online-turn-indicator.otb-theirs {
-            border-color: rgba(255,255,255,.14);
+        #online-turn-row.otb-theirs span:last-child {
             color: var(--text-muted)
         }
-        .online-turn-indicator.otb-theirs .otb-dot {
+        #online-turn-row.otb-theirs .otb-dot {
             background: #808993;
             animation: otbPulseGray 1.4s ease-in-out infinite
         }
         @keyframes otbPulseGreen {
             0% { box-shadow: 0 0 0 0 rgba(46,204,113,.55) }
-            70% { box-shadow: 0 0 0 8px rgba(46,204,113,0) }
+            70% { box-shadow: 0 0 0 6px rgba(46,204,113,0) }
             100% { box-shadow: 0 0 0 0 rgba(46,204,113,0) }
         }
         @keyframes otbPulseGray {
@@ -3035,6 +3020,10 @@
                         <span class="label" id="lbl-status">Status</span>
                         <span id="status-text">—</span>
                     </div>
+                    <div class="info-row" id="online-turn-row" style="display:none">
+                        <span class="label" id="lbl-online-turn">Turn</span>
+                        <span><span class="otb-dot"></span><span class="otb-text">—</span></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4218,6 +4207,7 @@
                 setTextContent('lbl-mode', t('mode'));
                 setTextContent('lbl-walls-left', t('wallsLeft'));
                 setTextContent('lbl-status', t('status'));
+                setTextContent('lbl-online-turn', omsg('نوبت', 'Turn'));
                 setTextContent('lbl-objective', t('objective'));
                 setTextContent('lbl-walls', t('walls'));
                 document.getElementById('info-walls-text').innerHTML = t('wallsText');
@@ -4968,7 +4958,7 @@
                     const card1 = createPlayerCard(p1);
                     const vsBox = document.createElement('div');
                     vsBox.className = 'bet-box';
-                    vsBox.innerHTML = `<div class="label">${t('match')}</div><div class="amount">${t('vs')}</div><div class="online-turn-indicator" id="online-turn-indicator"><span class="otb-dot"></span><span class="otb-text"></span></div>`;
+                    vsBox.innerHTML = `<div class="label">${t('match')}</div><div class="amount">${t('vs')}</div>`;
                     topbarEl.append(card0, vsBox, card1);
                     const mobileTopbar = document.getElementById('topbar-4p-mobile');
                     if (mobileTopbar) mobileTopbar.remove()
@@ -6028,19 +6018,19 @@
             }
 
             function showTurnBanner(myTurn) {
-                const el = document.getElementById('online-turn-indicator');
-                if (!el) return;
-                el.classList.toggle('otb-mine', myTurn);
-                el.classList.toggle('otb-theirs', !myTurn);
-                el.querySelector('.otb-text').textContent = myTurn ?
+                const row = document.getElementById('online-turn-row');
+                if (!row) return;
+                row.classList.toggle('otb-mine', myTurn);
+                row.classList.toggle('otb-theirs', !myTurn);
+                row.querySelector('.otb-text').textContent = myTurn ?
                     omsg('نوبت شماست', 'Your turn') :
                     omsg('نوبت حریف', "Opponent's turn");
-                el.style.display = 'flex'
+                row.style.display = 'flex'
             }
 
             function hideTurnBanner() {
-                const el = document.getElementById('online-turn-indicator');
-                if (el) el.style.display = 'none'
+                const row = document.getElementById('online-turn-row');
+                if (row) row.style.display = 'none'
             }
 
             function updateScores() {
