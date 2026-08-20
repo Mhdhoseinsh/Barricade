@@ -12,52 +12,61 @@
     <link rel="apple-touch-icon" href="icon-180.png">
     <title id="page-title">Route 9 - Dark Mode</title>
 
-    <!-- فونت فارسی وزیرمتن: یک فونت واحد و زیبا برای همه‌ی گوشی‌ها (اگر آفلاین باز شود، به فونت پیش‌فرض سیستم بازمی‌گردد) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <style>
-        /* ===== فونت‌های MiSans: ۶ وزن، هرکدوم واسه یک نقش/بخش مشخص ===== */
+        /* ===== فونت‌های SF Arabic: ۸ وزن ===== */
         /* پوشه fonts/ باید کنار index.html در گیت‌هاب‌پیجز باشه با همین اسم‌ها */
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Light.woff') format('woff');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Thin.woff2') format('woff2');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Ultralight.woff2') format('woff2');
+            font-weight: 200;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Light.woff2') format('woff2');
             font-weight: 300;
             font-style: normal;
             font-display: swap
         }
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Normal.woff') format('woff');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Regular.woff2') format('woff2');
             font-weight: 400;
             font-style: normal;
             font-display: swap
         }
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Regular.woff') format('woff');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Medium.woff2') format('woff2');
             font-weight: 500;
             font-style: normal;
             font-display: swap
         }
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Medium.woff') format('woff');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Semibold.woff2') format('woff2');
             font-weight: 600;
             font-style: normal;
             font-display: swap
         }
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Bold.woff') format('woff');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Bold.woff2') format('woff2');
             font-weight: 700;
             font-style: normal;
             font-display: swap
         }
         @font-face {
-            font-family: 'MiSans';
-            src: url('fonts/MiSans-Heavy.woff2') format('woff2');
+            font-family: 'SFArabic';
+            src: url('fonts/SFArabic-Heavy.woff2') format('woff2');
             font-weight: 800 900;
             font-style: normal;
             font-display: swap
@@ -92,7 +101,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'MiSans', 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'SFArabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             margin: 0;
@@ -749,6 +758,59 @@
             outline: none;
             border-color: #4aa8ff;
             box-shadow: 0 0 0 3px rgba(74,168,255,.15)
+        }
+        /* ===== OTP-style room-code entry (join screen) ===== */
+        .otp-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 9px;
+            margin-bottom: 14px
+        }
+        .otp-box {
+            width: 46px;
+            height: 56px;
+            border-radius: 14px;
+            border: 1.5px solid var(--border-color);
+            background: #0c1015;
+            color: #fff;
+            font-family: inherit;
+            font-size: 22px;
+            font-weight: 800;
+            text-align: center;
+            text-transform: uppercase;
+            caret-color: #4aa8ff;
+            transition: border-color .2s ease, box-shadow .2s ease, transform .2s cubic-bezier(.34,1.56,.64,1), background .2s ease
+        }
+        .otp-box:focus {
+            outline: none;
+            border-color: #4aa8ff;
+            background: #10161d;
+            box-shadow: 0 0 0 3px rgba(74,168,255,.18), 0 0 18px rgba(74,168,255,.15);
+            transform: translateY(-2px)
+        }
+        .otp-box.filled {
+            border-color: rgba(155,110,255,.55);
+            box-shadow: 0 0 14px rgba(155,110,255,.18)
+        }
+        .otp-box.otp-error {
+            border-color: var(--red-color) !important;
+            animation: otpShake .32s ease
+        }
+        @keyframes otpShake {
+            0%, 100% { transform: translateX(0) }
+            25% { transform: translateX(-6px) }
+            75% { transform: translateX(6px) }
+        }
+        @media (max-width:360px) {
+            .otp-box {
+                width: 38px;
+                height: 48px;
+                font-size: 18px;
+                border-radius: 12px
+            }
+            .otp-wrap {
+                gap: 6px
+            }
         }
         .online-spinner-sm {
             width: 16px;
@@ -3507,7 +3569,6 @@
                 </div>
                 <h1>بازی آنلاین</h1>
             </div>
-            <p class="subtitle">حالت بازی را انتخاب کن</p>
             <div id="online-mode-pick">
                 <button class="mode-btn" id="btn-online-pick-2p">
                     <div class="mode-text"><div class="t">کلاسیک ۱ در برابر ۱</div></div>
@@ -3576,9 +3637,13 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5L20 4M14 4h6v6"/><path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></svg>
                     </span>
                 </div>
-                <div class="online-input-wrap">
-                    <svg class="oi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    <input type="text" id="online-join-input" class="online-code-input" placeholder="کد اتاق را وارد کن">
+                <div class="otp-wrap" id="otp-wrap" dir="ltr">
+                    <input type="text" id="online-join-input" class="online-code-input" style="display:none">
+                    <input type="text" class="otp-box" data-otp-idx="0" inputmode="text" autocomplete="off" maxlength="1">
+                    <input type="text" class="otp-box" data-otp-idx="1" inputmode="text" autocomplete="off" maxlength="1">
+                    <input type="text" class="otp-box" data-otp-idx="2" inputmode="text" autocomplete="off" maxlength="1">
+                    <input type="text" class="otp-box" data-otp-idx="3" inputmode="text" autocomplete="off" maxlength="1">
+                    <input type="text" class="otp-box" data-otp-idx="4" inputmode="text" autocomplete="off" maxlength="1">
                 </div>
                 <button class="online-primary-btn" id="btn-online-connect" type="button">
                     <span>اتصال</span>
@@ -3663,7 +3728,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-p1" style="background:#E74C3C"></span>
-                        <input type="text" id="input-name-p1" maxlength="18" placeholder="Player 1 (Red)">
+                        <input type="text" id="input-name-p1" maxlength="15" placeholder="Player 1 (Red)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-p1"></div>
@@ -3672,7 +3737,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-p2" style="background:#3498DB"></span>
-                        <input type="text" id="input-name-p2" maxlength="18" placeholder="Player 2 (Blue)">
+                        <input type="text" id="input-name-p2" maxlength="15" placeholder="Player 2 (Blue)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-p2"></div>
@@ -3688,7 +3753,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-red" style="background:#E74C3C"></span>
-                            <input type="text" id="input-name-red" maxlength="18" placeholder="Red">
+                            <input type="text" id="input-name-red" maxlength="15" placeholder="Red">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-red"></div>
@@ -3697,7 +3762,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-blue" style="background:#3498DB"></span>
-                            <input type="text" id="input-name-blue" maxlength="18" placeholder="Blue">
+                            <input type="text" id="input-name-blue" maxlength="15" placeholder="Blue">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-blue"></div>
@@ -3713,7 +3778,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-green" style="background:#2ECC71"></span>
-                            <input type="text" id="input-name-green" maxlength="18" placeholder="Green">
+                            <input type="text" id="input-name-green" maxlength="15" placeholder="Green">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-green"></div>
@@ -3722,7 +3787,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-yellow" style="background:#F1C40F"></span>
-                            <input type="text" id="input-name-yellow" maxlength="18" placeholder="Yellow">
+                            <input type="text" id="input-name-yellow" maxlength="15" placeholder="Yellow">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-yellow"></div>
@@ -3734,7 +3799,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-hunter" style="background:#E74C3C"></span>
-                        <input type="text" id="input-name-hunter" maxlength="18" placeholder="Hunter (Red)">
+                        <input type="text" id="input-name-hunter" maxlength="15" placeholder="Hunter (Red)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-hunter"></div>
@@ -3743,7 +3808,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-escaper" style="background:#3498DB"></span>
-                        <input type="text" id="input-name-escaper" maxlength="18" placeholder="Escaper (Blue)">
+                        <input type="text" id="input-name-escaper" maxlength="15" placeholder="Escaper (Blue)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-escaper"></div>
@@ -3763,7 +3828,7 @@
             <div class="player-setup-card">
                 <div class="name-input-row">
                     <span class="avatar-preview" id="avatar-preview-online-me" style="background:#E74C3C"></span>
-                    <input type="text" id="input-name-online-me" maxlength="18" placeholder="">
+                    <input type="text" id="input-name-online-me" maxlength="15" placeholder="">
                 </div>
                 <div class="customize-row">
                     <div class="swatch-group" id="swatches-online-me"></div>
@@ -4719,6 +4784,57 @@
             const onlineJoinInput = document.getElementById('online-join-input');
             const onlineJoinStatus = document.getElementById('online-join-status');
 
+            // ===== OTP-style room-code boxes: keep them in sync with the hidden #online-join-input =====
+            const otpBoxes = Array.from(document.querySelectorAll('.otp-box'));
+
+            function otpSyncHiddenInput() {
+                onlineJoinInput.value = otpBoxes.map(b => b.value).join('')
+            }
+
+            function otpClear() {
+                otpBoxes.forEach(b => { b.value = ''; b.classList.remove('filled', 'otp-error') });
+                otpSyncHiddenInput()
+            }
+
+            function otpShakeError() {
+                otpBoxes.forEach(b => b.classList.add('otp-error'));
+                setTimeout(() => otpBoxes.forEach(b => b.classList.remove('otp-error')), 340)
+            }
+            otpBoxes.forEach((box, idx) => {
+                box.addEventListener('input', () => {
+                    box.value = box.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(-1);
+                    box.classList.toggle('filled', !!box.value);
+                    otpSyncHiddenInput();
+                    if (box.value && idx < otpBoxes.length - 1) otpBoxes[idx + 1].focus()
+                });
+                box.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !box.value && idx > 0) {
+                        otpBoxes[idx - 1].focus();
+                        otpBoxes[idx - 1].value = '';
+                        otpBoxes[idx - 1].classList.remove('filled');
+                        otpSyncHiddenInput()
+                    } else if (e.key === 'ArrowLeft' && idx > 0) {
+                        otpBoxes[idx - 1].focus()
+                    } else if (e.key === 'ArrowRight' && idx < otpBoxes.length - 1) {
+                        otpBoxes[idx + 1].focus()
+                    } else if (e.key === 'Enter') {
+                        document.getElementById('btn-online-connect').click()
+                    }
+                });
+                box.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const text = (e.clipboardData || window.clipboardData).getData('text').toUpperCase().replace(/[^A-Z0-9]/g, '');
+                    if (!text) return;
+                    otpBoxes.forEach((b, i) => {
+                        b.value = text[i] || '';
+                        b.classList.toggle('filled', !!b.value)
+                    });
+                    otpSyncHiddenInput();
+                    const nextEmpty = otpBoxes.find(b => !b.value);
+                    (nextEmpty || otpBoxes[otpBoxes.length - 1]).focus()
+                })
+            });
+
             function omsg(fa, en) { return currentLang === 'fa' ? fa : en }
 
             const onlineState = {
@@ -4765,7 +4881,7 @@
                 onlineChoiceView.style.display = 'none';
                 onlineCreateView.style.display = 'none';
                 onlineJoinView.style.display = 'none';
-                onlineJoinInput.value = '';
+                otpClear();
                 onlineJoinStatus.textContent = ''
             }
 
@@ -4898,7 +5014,9 @@
             };
             document.getElementById('btn-online-join').onclick = () => {
                 onlineChoiceView.style.display = 'none';
-                onlineJoinView.style.display = 'flex'
+                onlineJoinView.style.display = 'flex';
+                otpClear();
+                setTimeout(() => otpBoxes[0] && otpBoxes[0].focus(), 60)
             };
             document.getElementById('btn-online-cancel-join').onclick = () => {
                 teardownOnline(!1);
@@ -4907,7 +5025,7 @@
             };
             document.getElementById('btn-online-connect').onclick = async () => {
                 const raw = onlineJoinInput.value.trim().toUpperCase();
-                if (!raw) return;
+                if (raw.length < 5) { otpShakeError(); return }
                 onlineState.isHost = !1;
                 onlineJoinStatus.textContent = omsg('در حال اتصال...', 'Connecting...');
                 const maxP = onlineMaxPlayers();
@@ -4915,11 +5033,13 @@
                     const exists = await window.FBRoom.roomExists(raw);
                     if (!exists) {
                         onlineJoinStatus.textContent = omsg('اتاقی با این کد پیدا نشد', 'No room found with this code');
+                        otpShakeError();
                         return
                     }
                     const slot = await window.FBRoom.joinRoom(raw, maxP);
                     if (slot === null) {
                         onlineJoinStatus.textContent = omsg('این اتاق پر است', 'This room is full');
+                        otpShakeError();
                         return
                     }
                     onlineState.localPlayerId = slot;
@@ -5007,7 +5127,7 @@
                         restartSameGame()
                     } else if (data.type === 'profile') {
                         const pid = (data.id !== undefined) ? data.id : (onlineState.localPlayerId === 0 ? 1 : 0);
-                        onlineLobby.othersById[pid] = { name: (data.name || '').slice(0, 18), color: data.color || customColor(slotNameForId(onlineState.mode, pid)) };
+                        onlineLobby.othersById[pid] = { name: (data.name || '').slice(0, 15), color: data.color || customColor(slotNameForId(onlineState.mode, pid)) };
                         updateOnlineOppUI()
                     }
                 } finally {
@@ -5300,7 +5420,7 @@
             const onlineLobbyNameInput = document.getElementById('input-name-online-me');
             if (onlineLobbyNameInput) {
                 onlineLobbyNameInput.oninput = (e) => {
-                    onlineLobby.me.name = e.target.value.slice(0, 18);
+                    onlineLobby.me.name = e.target.value.slice(0, 15);
                     localStorage.setItem('barricade-online-name', onlineLobby.me.name);
                     broadcastOnlineProfile()
                 }
@@ -6271,7 +6391,7 @@
                     onlineChoiceView.style.display = 'flex';
                     onlineCreateView.style.display = 'none';
                     onlineJoinView.style.display = 'none';
-                    onlineJoinInput.value = '';
+                    otpClear();
                     onlineJoinStatus.textContent = '';
                     return
                 }
