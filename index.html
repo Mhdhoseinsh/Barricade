@@ -4120,7 +4120,7 @@
                 const code = window.FBRoom._genCode();
                 const roomRef = ref(fbDb, 'rooms/' + code);
                 await set(roomRef, {
-                    createdAt: Date.now(),
+                    createdAt: serverTimestamp(),
                     maxPlayers: maxPlayers,
                     status: 'lobby'
                 });
