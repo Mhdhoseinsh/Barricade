@@ -4003,7 +4003,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import {
-            getDatabase, ref, set, get, push, remove, update,
+            getDatabase, ref, set, get, push, remove, update, runTransaction,
             onChildAdded, onValue, onDisconnect, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
@@ -4022,7 +4022,7 @@
 
         window.FBRoom = {
             db: fbDb,
-            ref, set, get, push, remove, update, onChildAdded, onValue, onDisconnect, serverTimestamp,
+            ref, set, get, push, remove, update, onChildAdded, onValue, onDisconnect, serverTimestamp, runTransaction,
 
             _roomCode: null,
             _mySlotId: null,
@@ -4055,26 +4055,25 @@
 
             async joinRoom(code, maxPlayers) {
                 const playersRef = ref(fbDb, 'rooms/' + code + '/players');
-                for (let attempt = 0; attempt < 5; attempt++) {
-                    const snap = await get(playersRef);
-                    const taken = snap.exists() ? snap.val() : {};
+                let claimedSlot = -1;
+                const result = await runTransaction(playersRef, (current) => {
+                    const taken = current || {};
                     let slot = -1;
                     for (let i = 0; i < maxPlayers; i++) {
-                        if (!taken[i]) { slot = i; break }
+                        if (!taken[i] || taken[i].connected === !1) { slot = i; break }
                     }
-                    if (slot === -1) return null;
-                    const slotRef = ref(fbDb, 'rooms/' + code + '/players/' + slot);
-                    await set(slotRef, { joinedAt: Date.now(), connected: !0 });
-                    onDisconnect(slotRef).update({ connected: !1, leftAt: Date.now() });
-                    const confirmSnap = await get(slotRef);
-                    if (confirmSnap.exists()) {
-                        window.FBRoom._roomCode = code;
-                        window.FBRoom._mySlotId = slot;
-                        window.FBRoom._joinedAt = Date.now();
-                        return slot
-                    }
-                }
-                return null
+                    if (slot === -1) return; // abort, room full — undefined aborts the transaction
+                    claimedSlot = slot;
+                    taken[slot] = { joinedAt: Date.now(), connected: !0 };
+                    return taken
+                });
+                if (!result.committed || claimedSlot === -1) return null;
+                const slotRef = ref(fbDb, 'rooms/' + code + '/players/' + claimedSlot);
+                onDisconnect(slotRef).update({ connected: !1, leftAt: Date.now() });
+                window.FBRoom._roomCode = code;
+                window.FBRoom._mySlotId = claimedSlot;
+                window.FBRoom._joinedAt = Date.now();
+                return claimedSlot
             },
 
             send(data) {
