@@ -8,6 +8,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="description" content="Route 9 — an offline pass-and-play strategy board game. Block your rivals with walls and race to the finish, solo, 1v1, 2v2 team battles, or Wolf vs Sheep mode.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://*.googleapis.com https://firebase.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
     <link rel="apple-touch-icon" href="icon-180.png">
     <title id="page-title">Route 9 - Dark Mode</title>
@@ -305,7 +307,7 @@
             flex-direction: column;
             align-items: center;
             gap: 12px;
-            margin-bottom: 4px
+            margin-bottom: 26px
         }
         .online-hero-icon {
             position: relative;
@@ -3536,7 +3538,7 @@
                 </div>
                 <div class="mode-text">
                     <div class="t" id="mode-classic-title">Classic Race (2 or 4 Players)</div>
-                    <div class="d" id="mode-classic-desc">1v1 or 2v2 teams — place walls to block the way, race to the opposite side</div>
+                    <div class="d" id="mode-classic-desc">Block your rivals and race to the other side</div>
                 </div>
             </button>
             <button class="mode-btn" id="btn-start-hunter">
@@ -3545,7 +3547,7 @@
                 </div>
                 <div class="mode-text">
                     <div class="t" id="mode-hunter-title">Hunter &amp; Escaper</div>
-                    <div class="d" id="mode-hunter-desc">1v1 — one player must escape to the far side while the other hunts them down before they arrive</div>
+                    <div class="d" id="mode-hunter-desc">One escapes, one hunts — first to win takes it</div>
                 </div>
             </button>
             <button class="mode-btn" id="btn-start-online" style="display:none">
@@ -3567,17 +3569,17 @@
                         <path d="M3.6 9h16.8M3.6 15h16.8M12 3a15 15 0 0 1 3.5 9A15 15 0 0 1 12 21a15 15 0 0 1-3.5-9A15 15 0 0 1 12 3z"/>
                     </svg>
                 </div>
-                <h1>بازی آنلاین</h1>
+                <h1 id="online-hero-title">بازی آنلاین</h1>
             </div>
             <div id="online-mode-pick">
                 <button class="mode-btn" id="btn-online-pick-2p">
-                    <div class="mode-text"><div class="t">کلاسیک ۱ در برابر ۱</div></div>
+                    <div class="mode-text"><div class="t" id="online-pick-2p-label">کلاسیک ۱ در برابر ۱</div></div>
                 </button>
                 <button class="mode-btn" id="btn-online-pick-4p">
-                    <div class="mode-text"><div class="t">چهار نفره (دو تیم دونفره)</div></div>
+                    <div class="mode-text"><div class="t" id="online-pick-4p-label">چهار نفره</div></div>
                 </button>
                 <button class="mode-btn" id="btn-online-pick-hunter">
-                    <div class="mode-text"><div class="t">شکارچی و فراری</div></div>
+                    <div class="mode-text"><div class="t" id="online-pick-hunter-label">شکارچی و فراری</div></div>
                 </button>
             </div>
             <div id="online-choice-view" class="online-choice-grid" style="display:none">
@@ -3586,8 +3588,8 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M4 12h16"/><circle cx="12" cy="12" r="9" opacity=".35"/></svg>
                     </span>
                     <span class="oac-text">
-                        <span class="oac-title">ساخت اتاق</span>
-                        <span class="oac-desc">یک کد بساز و برای حریف بفرست</span>
+                        <span class="oac-title" id="online-create-title">ساخت اتاق</span>
+                        <span class="oac-desc" id="online-create-desc">یک کد بساز و برای حریف بفرست</span>
                     </span>
                     <span class="oac-arrow">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
@@ -3598,8 +3600,8 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 13.5L20 4M14 4h6v6"/><path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></svg>
                     </span>
                     <span class="oac-text">
-                        <span class="oac-title">پیوستن با کد</span>
-                        <span class="oac-desc">کد حریف را وارد کن</span>
+                        <span class="oac-title" id="online-join-title">پیوستن با کد</span>
+                        <span class="oac-desc" id="online-join-desc">کد حریف را وارد کن</span>
                     </span>
                     <span class="oac-arrow">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
@@ -3607,7 +3609,7 @@
                 </button>
                 <button class="online-back-link" id="btn-online-back1">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
-                    <span>بازگشت</span>
+                    <span id="online-back-label">بازگشت</span>
                 </button>
             </div>
             <div id="online-create-view" class="online-wait-view online-room-panel" style="display:none">
@@ -3627,7 +3629,7 @@
                             <svg class="oc-check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 10 18 20 6"/></svg>
                         </button>
                     </div>
-                    <p class="online-code-hint">این کد را برای حریفت بفرست</p>
+                    <p class="online-code-hint" id="online-code-hint">این کد را برای حریفت بفرست</p>
                 </div>
                 <button class="online-cancel-btn" id="btn-online-cancel-create" type="button">لغو</button>
             </div>
@@ -3646,7 +3648,7 @@
                     <input type="text" class="otp-box" data-otp-idx="4" inputmode="text" autocomplete="off" maxlength="1">
                 </div>
                 <button class="online-primary-btn" id="btn-online-connect" type="button">
-                    <span>اتصال</span>
+                    <span id="online-connect-label">اتصال</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </button>
                 <button class="online-cancel-btn" id="btn-online-cancel-join" type="button">لغو</button>
@@ -3721,7 +3723,7 @@
                             <path d="M12.2 19.2c.4-3 2.4-5 4.8-5s4.4 2 4.8 5"/>
                         </svg>
                     </span>
-                    <span id="pc-4-label">4 Players (2v2)</span>
+                    <span id="pc-4-label">4 Players</span>
                 </button>
             </div>
             <div id="name-fields-2p" style="display:none">
@@ -4406,12 +4408,27 @@
                     startSubtitle: 'Offline pass-and-play — choose a mode',
                     howToPlay: 'How to Play',
                     modeClassicTitle: 'Classic Race (2 or 4 Players)',
-                    modeClassicDesc: 'Play 1v1 with 10 walls each, or 4 players in 2v2 teams with 6 walls each — race to the opposite side while blocking your rivals.',
+                    modeClassicDesc: 'Block your rivals and race to the other side.',
                     modeClassicBadge: '2-4',
                     pc2Label: '2 Players',
-                    pc4Label: '4 Players (2v2)',
+                    pc4Label: '4 Players',
                     modeHunterTitle: 'Wolf VS Sheep',
-                    modeHunterDesc: '1v1 — one player must escape to the far side while the other hunts them down before they arrive',
+                    modeHunterDesc: 'One escapes, one hunts — first to win takes it.',
+                    modeOnlineTitle: 'Online Game',
+                    modeOnlineDesc: 'Play with a friend remotely; one creates a room, the other joins with a code',
+                    onlineHeroTitle: 'Online Game',
+                    onlinePick2pLabel: 'Classic 1 vs 1',
+                    onlinePick4pLabel: '4 Players',
+                    onlinePickHunterLabel: 'Wolf and Sheep',
+                    onlineCreateTitle: 'Create Room',
+                    onlineCreateDesc: 'Make a code and send it to your opponent',
+                    onlineJoinTitle: 'Join with Code',
+                    onlineJoinDesc: "Enter your opponent's code",
+                    onlineBackLabel: 'Back',
+                    onlineCodeHint: 'Send this code to your opponent',
+                    onlineCancelLabel: 'Cancel',
+                    onlineConnectLabel: 'Connect',
+                    onlineCopyCodeAria: 'Copy code',
                     move: 'Move',
                     horizontal: 'Horizontal',
                     vertical: 'Vertical',
@@ -4438,7 +4455,7 @@
                     gameOver: 'Game Over',
                     turnSuffix: "'s Turn",
                     mode2p: '2 Player',
-                    mode4p: '4 Player (2v2 Teams)',
+                    mode4p: '4 Player',
                     modeHunter: 'Hunter & Survivor',
                     objective2p: 'Reach the opposite side before your opponent.',
                     objective4p: 'Get both teammates to their target edge before the other team.',
@@ -4540,12 +4557,27 @@
                     startSubtitle: 'یک بازی افلاین نوبتی روی گوشی',
                     howToPlay: 'آموزش بازی',
                     modeClassicTitle: 'مسابقه کلاسیک (دو یا چهار نفره)',
-                    modeClassicDesc: 'یک به یک با ۱۰ دیوار برای هرکس، یا چهار نفره دو تیم دونفره با ۶ دیوار برای هرکس — با گذاشتن دیوار جلوی حریف را بگیر و زودتر به سمت مقابل برس.',
+                    modeClassicDesc: 'با گذاشتن دیوار جلوی حریف را بگیر و زودتر به سمت مقابل برس.',
                     modeClassicBadge: '۲-۴',
                     pc2Label: 'دو نفره',
-                    pc4Label: 'چهار نفره (۲ به ۲)',
+                    pc4Label: 'چهار نفره',
+                    modeOnlineTitle: 'بازی آنلاین',
+                    modeOnlineDesc: 'با یک دوست از راه دور بازی کن؛ یکی اتاق می‌سازد، دیگری با کد وصل می‌شود',
+                    onlineHeroTitle: 'بازی آنلاین',
+                    onlinePick2pLabel: 'کلاسیک ۱ در برابر ۱',
+                    onlinePick4pLabel: 'چهار نفره',
+                    onlinePickHunterLabel: 'شکارچی و فراری',
+                    onlineCreateTitle: 'ساخت اتاق',
+                    onlineCreateDesc: 'یک کد بساز و برای حریف بفرست',
+                    onlineJoinTitle: 'پیوستن با کد',
+                    onlineJoinDesc: 'کد حریف را وارد کن',
+                    onlineBackLabel: 'بازگشت',
+                    onlineCodeHint: 'این کد را برای حریفت بفرست',
+                    onlineCancelLabel: 'لغو',
+                    onlineConnectLabel: 'اتصال',
+                    onlineCopyCodeAria: 'کپی کد',
                     modeHunterTitle: 'گرگ مقابل میش',
-                    modeHunterDesc: 'یک به یک — یک نفر باید خود را به سمت مقابل برساند و نفر دیگر باید قبل از رسیدنش او را شکار کند',
+                    modeHunterDesc: 'یکی فرار می‌کند، یکی شکار می‌کند — برنده کسی است که زودتر برسد.',
                     move: 'حرکت',
                     horizontal: 'افقی',
                     vertical: 'عمودی',
@@ -4572,7 +4604,7 @@
                     gameOver: 'پایان بازی',
                     turnSuffix: ' نوبت اوست',
                     mode2p: 'دو نفره',
-                    mode4p: 'چهار نفره (دو تیم دونفره)',
+                    mode4p: 'چهار نفره',
                     modeHunter: 'گرگ و میش',
                     objective2p: 'زودتر از حریف به سمت مقابل برسید.',
                     objective4p: 'هر دو هم‌تیمی باید زودتر از تیم مقابل به لبه‌ی هدف خود برسند.',
@@ -5581,6 +5613,23 @@
                 setTextContent('team-vs-label', t('vs'));
                 setTextContent('mode-hunter-title', t('modeHunterTitle'));
                 setTextContent('mode-hunter-desc', t('modeHunterDesc'));
+                setTextContent('mode-online-title', t('modeOnlineTitle'));
+                setTextContent('mode-online-desc', t('modeOnlineDesc'));
+                setTextContent('online-hero-title', t('onlineHeroTitle'));
+                setTextContent('online-pick-2p-label', t('onlinePick2pLabel'));
+                setTextContent('online-pick-4p-label', t('onlinePick4pLabel'));
+                setTextContent('online-pick-hunter-label', t('onlinePickHunterLabel'));
+                setTextContent('online-create-title', t('onlineCreateTitle'));
+                setTextContent('online-create-desc', t('onlineCreateDesc'));
+                setTextContent('online-join-title', t('onlineJoinTitle'));
+                setTextContent('online-join-desc', t('onlineJoinDesc'));
+                setTextContent('online-back-label', t('onlineBackLabel'));
+                setTextContent('online-code-hint', t('onlineCodeHint'));
+                setTextContent('online-connect-label', t('onlineConnectLabel'));
+                setTextContent('btn-online-cancel-create', t('onlineCancelLabel'));
+                setTextContent('btn-online-cancel-join', t('onlineCancelLabel'));
+                const copyCodeBtn = document.getElementById('btn-online-copy-code');
+                if (copyCodeBtn) copyCodeBtn.setAttribute('aria-label', t('onlineCopyCodeAria'));
                 setTextContent('gt-offline-label', t('gtOfflineLabel'));
                 setTextContent('gt-online-label', t('gtOnlineLabel'));
                 setTextContent('game-type-lock-hint', t('gtLockHint4p'));
@@ -6344,8 +6393,7 @@
                 document.getElementById('btn-pc-2').classList.toggle('active', mode === '2p');
                 document.getElementById('btn-pc-4').classList.toggle('active', mode === '4p');
                 document.getElementById('player-count-toggle').dataset.active = (mode === '4p' ? '4' : '2');
-                updateGameTypeAvailability(mode);
-                playCardAnimation()
+                updateGameTypeAvailability(mode)
             }
 
             function showNameEntry(mode, isClassic) {
