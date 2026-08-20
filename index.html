@@ -18,6 +18,50 @@
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
+        /* ===== فونت‌های MiSans: ۶ وزن، هرکدوم واسه یک نقش/بخش مشخص ===== */
+        /* پوشه fonts/ باید کنار index.html در گیت‌هاب‌پیجز باشه با همین اسم‌ها */
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Light.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Normal.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Regular.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Medium.woff') format('woff');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Bold.woff') format('woff');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap
+        }
+        @font-face {
+            font-family: 'MiSans';
+            src: url('fonts/MiSans-Heavy.woff2') format('woff2');
+            font-weight: 800 900;
+            font-style: normal;
+            font-display: swap
+        }
         :root {
             --header-h: 62px;
             --bg-color: #000000;
@@ -48,7 +92,7 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'MiSans', 'Vazirmatn', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             justify-content: center;
             margin: 0;
@@ -108,11 +152,13 @@
         .start-card h1 {
             margin: 0 0 6px;
             font-size: 24px;
+            font-weight: 900;
             letter-spacing: .5px
         }
         .start-card .subtitle {
             color: var(--text-muted);
             font-size: 13px;
+            font-weight: 300;
             text-align: center;
             margin: 0 0 26px;
             line-height: 1.6
@@ -167,6 +213,7 @@
         }
         .mode-btn .mode-text .d {
             font-size: 11.5px;
+            font-weight: 300;
             color: var(--text-muted);
             margin-top: 3px;
             line-height: 1.4
@@ -211,14 +258,20 @@
         .online-card::before {
             content: '';
             position: absolute;
-            top: -60%;
+            top: -20%;
             left: -20%;
             width: 140%;
             height: 140%;
-            background: radial-gradient(circle at 30% 20%, rgba(52,152,219,.16), transparent 60%),
-                        radial-gradient(circle at 80% 80%, rgba(46,204,113,.12), transparent 55%);
+            background: radial-gradient(circle at 30% 20%, rgba(74,168,255,.2), transparent 58%),
+                        radial-gradient(circle at 80% 80%, rgba(155,110,255,.16), transparent 55%),
+                        radial-gradient(circle at 50% 100%, rgba(46,204,113,.1), transparent 50%);
             pointer-events: none;
-            z-index: 0
+            z-index: 0;
+            animation: auroraDrift 12s ease-in-out infinite alternate
+        }
+        @keyframes auroraDrift {
+            0% { transform: translate(0, 0) rotate(0deg) }
+            100% { transform: translate(3%, -4%) rotate(6deg) }
         }
         .online-card > * {
             position: relative;
@@ -228,27 +281,51 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 4px
         }
         .online-hero-icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, rgba(52,152,219,.22), rgba(46,204,113,.18));
-            border: 1px solid rgba(255,255,255,.08);
-            box-shadow: 0 6px 18px rgb(0 0 0 / .35)
+            background: linear-gradient(135deg, #1c2530, #12161d);
+            border: 1px solid rgba(74,168,255,.3);
+            box-shadow: 0 6px 22px rgb(0 0 0 / .4), 0 0 26px rgba(74,168,255,.18)
+        }
+        .online-hero-icon::before,
+        .online-hero-icon::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(74,168,255,.35);
+            animation: orpPulse 2.6s cubic-bezier(.3,.6,.4,1) infinite
+        }
+        .online-hero-icon::after {
+            animation-delay: 1.3s
         }
         .online-hero-icon svg {
-            width: 26px;
-            height: 26px;
-            color: #6fd0ff
+            position: relative;
+            z-index: 1;
+            width: 27px;
+            height: 27px;
+            color: #6fd0ff;
+            animation: heroIconSpin 6s linear infinite
+        }
+        @keyframes heroIconSpin {
+            0%, 85%, 100% { transform: rotate(0deg) }
+            92% { transform: rotate(8deg) }
         }
         .online-hero h1 {
-            margin: 0
+            margin: 0;
+            background: linear-gradient(135deg, #fff, #a9d4ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent
         }
         /* ===== ONLINE CHOICE (Create / Join) — redesigned ===== */
         .online-choice-grid {
@@ -286,6 +363,19 @@
         .online-action-join::before {
             background: linear-gradient(120deg, rgba(155,110,255,.14), transparent 65%)
         }
+        .online-action-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -60%;
+            width: 40%;
+            background: linear-gradient(100deg, transparent, rgba(255,255,255,.08), transparent);
+            transform: skewX(-18deg);
+            transition: left .55s ease;
+            z-index: 0;
+            pointer-events: none
+        }
         .online-action-card:hover {
             transform: translateY(-2px);
             border-color: #3a4652;
@@ -294,8 +384,14 @@
         .online-action-card:hover::before {
             opacity: 1
         }
+        .online-action-card:hover::after {
+            left: 130%
+        }
         .online-action-card:active {
             transform: translateY(0) scale(.98)
+        }
+        .online-action-card:hover .oac-icon {
+            transform: scale(1.08) rotate(-4deg)
         }
         .oac-icon {
             position: relative;
@@ -306,7 +402,8 @@
             border-radius: 14px;
             display: flex;
             align-items: center;
-            justify-content: center
+            justify-content: center;
+            transition: transform .3s cubic-bezier(.34, 1.56, .64, 1)
         }
         .online-action-create .oac-icon {
             background: linear-gradient(135deg, rgba(74,168,255,.22), rgba(74,168,255,.06));
@@ -460,10 +557,15 @@
             align-items: center;
             gap: 10px;
             background: #0c1015;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(74,168,255,.3);
             border-radius: 16px;
             padding: 8px 8px 8px 18px;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 0 28px rgba(74,168,255,.1)
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 0 28px rgba(74,168,255,.1);
+            animation: codeCardGlow 2.4s ease-in-out infinite
+        }
+        @keyframes codeCardGlow {
+            0%, 100% { box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 0 20px rgba(74,168,255,.1) }
+            50% { box-shadow: inset 0 0 0 1px rgba(255,255,255,.02), 0 0 32px rgba(74,168,255,.28) }
         }
         html[dir="rtl"] .online-code-card {
             padding: 8px 18px 8px 8px
@@ -563,7 +665,8 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
-            background: linear-gradient(135deg, #2d7bff, #1e5fd6);
+            background: linear-gradient(115deg, #2d7bff, #7a5cff, #2d7bff);
+            background-size: 220% 100%;
             border: none;
             border-radius: 14px;
             padding: 14px;
@@ -573,8 +676,11 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 8px 22px rgba(45,123,255,.3);
-            transition: transform .2s ease, box-shadow .2s ease;
+            transition: transform .2s ease, box-shadow .2s ease, background-position .6s ease;
             margin-bottom: 10px
+        }
+        .online-primary-btn:hover {
+            background-position: 100% 0
         }
         .online-primary-btn:hover {
             transform: translateY(-1px);
@@ -605,6 +711,7 @@
         .online-status-text {
             color: var(--text-muted);
             font-size: 13px;
+            font-weight: 500;
             line-height: 1.6;
             margin: 0 0 14px;
             min-height: 18px
@@ -813,12 +920,11 @@
             cursor: not-allowed;
             pointer-events: none
         }
-        /* ===== New player timer: horizontal capsule bar under the wall gauge, distinct from the wall-pip style ===== */
+        /* ===== Player timer: mirrors the .timer-chip badge already used in the timer picker, for full visual consistency ===== */
         .player-timer {
             display: none;
-            align-items: center;
-            gap: 7px;
-            margin-top: 6px
+            margin-top: 6px;
+            width: 100%
         }
         .player-timer.visible {
             display: flex;
@@ -829,124 +935,88 @@
             to { opacity: 1; transform: translateY(0) }
         }
         .pt-icon {
-            display: flex;
-            flex-shrink: 0;
-            opacity: .55;
-            color: var(--text-muted);
-            transition: color .3s ease, opacity .3s ease
+            display: none
+        }
+        .pt-fill {
+            display: none
         }
         .pt-track {
-            position: relative;
             flex: 1;
             min-width: 54px;
             max-width: 96px;
-            height: 16px;
-            border-radius: 8px;
-            background: #1b222c;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .6);
-            transition: box-shadow .3s ease
-        }
-        .pt-fill {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            border-radius: 8px;
-            background: linear-gradient(90deg, #4b5768, #5d6b7d);
-            background-size: 200% 100%;
-            transition: width 1s linear, background .35s ease
-        }
-        .pt-time {
-            position: relative;
-            z-index: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100%;
-            direction: ltr;
-            font-family: 'SF Mono', 'Roboto Mono', 'Consolas', monospace;
-            font-size: 10.5px;
+            background: #151a22;
+            border: none;
+            box-shadow: inset 0 0 0 1.5px var(--border-color);
+            border-radius: 12px;
+            padding: 5px 8px;
+            transition: background .25s ease, box-shadow .25s ease
+        }
+        .pt-time {
+            display: block;
+            font-family: inherit;
+            font-size: 12.5px;
             font-weight: 800;
-            letter-spacing: -.2px;
-            color: #c3ccd6;
+            color: var(--text-main);
             font-variant-numeric: tabular-nums;
-            transition: color .3s ease;
-            text-shadow: 0 1px 2px rgba(0,0,0,.5)
+            transition: color .22s ease
         }
         .player-timer:not(.ticking) .pt-track {
-            opacity: .7
-        }
-        .player-timer.ticking .pt-icon {
-            color: #3b82f6;
-            opacity: 1
+            opacity: .75
         }
         .player-timer.ticking .pt-track {
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .6), 0 0 9px rgba(59, 130, 246, .5)
-        }
-        .player-timer.ticking .pt-fill {
-            background: linear-gradient(90deg, #2563eb, #3b82f6, #60a5fa);
-            animation: ptShimmer 1.8s linear infinite
-        }
-        @keyframes ptShimmer {
-            0% { background-position: 0% 0 }
-            100% { background-position: -200% 0 }
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            box-shadow: none
         }
         .player-timer.ticking .pt-time {
-            color: #eaf1ff
-        }
-        .player-timer.warning .pt-icon {
-            color: #ff9f43;
-            opacity: 1
+            color: #fff
         }
         .player-timer.warning .pt-track {
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .6), 0 0 9px rgba(255, 159, 67, .4)
-        }
-        .player-timer.warning .pt-fill {
-            background: linear-gradient(90deg, #c9760f, #ff9f43, #ffb96b)
+            background: linear-gradient(135deg, #c9760f, #b45f0a);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            box-shadow: none
         }
         .player-timer.warning .pt-time {
-            color: #ffb96b
-        }
-        .player-timer.critical .pt-icon {
-            color: #ff3b30;
-            opacity: 1
+            color: #fff
         }
         .player-timer.critical .pt-track {
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, .6), 0 0 12px rgba(255, 59, 48, .65);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            box-shadow: none;
             animation: ptCriticalPulse .7s ease-in-out infinite
         }
-        .player-timer.critical .pt-fill {
-            background: linear-gradient(90deg, #b71c1c, #ff3b30, #ff8177)
-        }
         .player-timer.critical .pt-time {
-            color: #ff8177
+            color: #fff
         }
         @keyframes ptCriticalPulse {
             0%, 100% { transform: scale(1) }
-            50% { transform: scale(1.035) }
+            50% { transform: scale(1.05) }
         }
         @media (max-width:480px) {
             .pt-track {
                 min-width: 44px;
                 max-width: 74px;
-                height: 14px
+                padding: 4px 6px;
+                border-radius: 10px
             }
             .pt-time {
-                font-size: 9.5px
-            }
-            .pt-icon svg {
-                width: 12px;
-                height: 12px
+                font-size: 10.5px
             }
         }
         @media (max-width:360px) {
             .pt-track {
                 min-width: 36px;
                 max-width: 60px;
-                height: 13px
+                padding: 3px 5px
             }
             .pt-time {
-                font-size: 8.5px
+                font-size: 9.5px
             }
         }
         .team-group {
@@ -1035,6 +1105,9 @@
         .topbar.mode-4p .player-card {
             flex: 1;
             min-width: 0
+        }
+        .topbar.mode-4p .player-card.team-b-align {
+            flex-direction: row-reverse
         }
         .topbar.mode-2p .player-info {
             min-width: 0
@@ -1139,23 +1212,25 @@
         }
         .bet-box {
             flex-shrink: 0;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: #0c1015;
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
+            background: linear-gradient(150deg, #1d2530, #151a22);
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
             border-radius: 50%;
-            border: 1px solid #252e39;
-            box-shadow: 0 0 0 1px rgb(255 255 255 / .02) inset
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgb(0 0 0 / .4), 0 0 0 1px rgb(255 255 255 / .02) inset;
+            z-index: 2
         }
         .bet-box .vs-x {
-            font-size: 17px;
+            font-size: 11.5px;
             font-weight: 800;
-            color: #facc15;
-            line-height: 1
+            letter-spacing: .5px;
+            color: #cbd5e1
         }
         .main-area {
             display: flex;
@@ -1759,7 +1834,7 @@
                 min-width: 30px
             }
             .bet-box .vs-x {
-                font-size: 14px
+                font-size: 10.5px
             }
         }
         @media (max-width:360px) {
@@ -1784,7 +1859,7 @@
                 min-width: 26px
             }
             .bet-box .vs-x {
-                font-size: 12px
+                font-size: 9.5px
             }
         }
         #top-controls {
@@ -1915,7 +1990,7 @@
             gap: 8px
         }
         html[dir="rtl"] #top-controls {
-            justify-content: flex-end;
+            justify-content: flex-start;
             direction: rtl
         }
         html[dir="rtl"] .top-menu-panel .top-ctrl-btn,
@@ -1942,6 +2017,7 @@
                 border: 1px solid var(--border-color);
                 border-radius: 16px;
                 padding: 8px;
+                overflow: hidden;
                 box-shadow: 0 16px 44px rgb(0 0 0 / .55);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
@@ -1982,6 +2058,9 @@
             }
             .top-menu-panel.open .top-ctrl-btn {
                 opacity: 1;
+                transform: translateX(0)
+            }
+            html[dir="rtl"] .top-menu-panel.open .top-ctrl-btn {
                 transform: translateX(0)
             }
             .top-menu-panel.open .top-ctrl-btn:nth-child(1) { transition-delay: .04s }
@@ -2579,19 +2658,31 @@
             display: none
         }
         #online-lobby-countdown {
+            position: relative;
             text-align: center;
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 800;
-            color: #2ecc71;
-            margin: 4px auto 16px;
+            color: #fff;
+            margin: 6px auto 18px;
             font-variant-numeric: tabular-nums;
-            width: 58px;
-            height: 58px;
-            line-height: 54px;
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
             border-radius: 50%;
-            background: rgba(46,204,113,.08);
-            border: 2px solid rgba(46,204,113,.35);
+            background: conic-gradient(#2ecc71 calc(var(--pct, 100) * 1%), rgba(46,204,113,.12) 0);
+            transition: background .95s linear;
             animation: countdownPulse 1s ease-in-out infinite
+        }
+        #online-lobby-countdown::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            background: var(--card-bg)
+        }
+        #online-lobby-countdown span {
+            position: relative;
+            z-index: 1
         }
         @keyframes countdownPulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(46,204,113,.28) }
@@ -2809,6 +2900,53 @@
             margin: 0 0 18px;
             font-size: 20px;
             text-align: center
+        }
+        .online-name-lock-info {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, rgba(74,168,255,.12), rgba(155,110,255,.08));
+            border: 1px solid rgba(74,168,255,.25);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 18px;
+            text-align: start;
+            animation: fieldPopIn .35s cubic-bezier(.34, 1.56, .64, 1) both
+        }
+        #name-entry-view.gt-online .online-name-lock-info {
+            display: flex
+        }
+        #name-entry-view.gt-online #name-fields-2p,
+        #name-entry-view.gt-online #name-fields-4p,
+        #name-entry-view.gt-online #name-fields-hunter {
+            display: none !important
+        }
+        .online-name-lock-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(74,168,255,.15);
+            color: #6fbaff
+        }
+        .online-name-lock-icon svg {
+            width: 20px;
+            height: 20px
+        }
+        .online-name-lock-text {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            line-height: 1.6
+        }
+        .online-name-lock-text b {
+            color: var(--text-main);
+            display: block;
+            font-size: 13.5px;
+            margin-bottom: 2px;
+            font-weight: 700
         }
         .lang-switch {
             position: relative;
@@ -3122,10 +3260,11 @@
             .topbar-4p-mobile .pt-track {
                 min-width: 40px;
                 max-width: 64px;
-                height: 13px
+                padding: 3px 5px;
+                border-radius: 9px
             }
             .topbar-4p-mobile .pt-time {
-                font-size: 8.5px
+                font-size: 9px
             }
             .topbar-4p-mobile .player-info .name {
                 font-size: 13px;
@@ -3454,6 +3593,15 @@
                 </button>
             </div>
             <p class="game-type-lock-hint" id="game-type-lock-hint" style="display:none"></p>
+            <div class="online-name-lock-info" id="online-name-lock-info">
+                <span class="online-name-lock-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c1-3.8 4-6 8-6s7 2.2 8 6"/></svg>
+                </span>
+                <span class="online-name-lock-text">
+                    <b id="online-name-lock-title">اسم و آواتار داخل اتاق تنظیم می‌شود</b>
+                    <span id="online-name-lock-desc">بعد از ساخت یا پیوستن به اتاق، در لابی بازی اسم و رنگ آواتارت را انتخاب می‌کنی.</span>
+                </span>
+            </div>
             <div class="timer-select-wrap" id="timer-select-wrap">
                 <div class="timer-select-label">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M9 2h6"/></svg>
@@ -3591,10 +3739,10 @@
             </div>
         </div>
 
-        <div class="start-card" id="online-lobby-view" style="display:none">
+        <div class="start-card online-card" id="online-lobby-view" style="display:none">
             <h1 id="online-lobby-title">Set Name &amp; Avatar</h1>
             <p class="subtitle" id="online-lobby-desc">You have up to 15 seconds to set your name and avatar color</p>
-            <div id="online-lobby-countdown">15</div>
+            <div id="online-lobby-countdown"><span id="online-lobby-countdown-num">15</span></div>
             <div class="player-setup-card">
                 <div class="name-input-row">
                     <span class="avatar-preview" id="avatar-preview-online-me" style="background:#E74C3C"></span>
@@ -3820,6 +3968,136 @@
     </div>
 
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import {
+            getDatabase, ref, set, get, push, remove, update,
+            onChildAdded, onValue, onDisconnect, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZNATL758Kbw4vmdtNArwEE3Go_OsNXMU",
+            authDomain: "route9-gg.firebaseapp.com",
+            databaseURL: "https://route9-gg-default-rtdb.firebaseio.com",
+            projectId: "route9-gg",
+            storageBucket: "route9-gg.firebasestorage.app",
+            messagingSenderId: "704279494875",
+            appId: "1:704279494875:web:52a8b279e55cac71890cfe"
+        };
+
+        const fbApp = initializeApp(firebaseConfig);
+        const fbDb = getDatabase(fbApp);
+
+        window.FBRoom = {
+            db: fbDb,
+            ref, set, get, push, remove, update, onChildAdded, onValue, onDisconnect, serverTimestamp,
+
+            _roomCode: null,
+            _mySlotId: null,
+            _msgListeners: [],
+            _presenceListeners: [],
+            _joinedAt: 0,
+
+            async createRoom(maxPlayers) {
+                const code = window.FBRoom._genCode();
+                const roomRef = ref(fbDb, 'rooms/' + code);
+                await set(roomRef, {
+                    createdAt: Date.now(),
+                    maxPlayers: maxPlayers,
+                    status: 'lobby'
+                });
+                return code
+            },
+
+            _genCode() {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let s = '';
+                for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
+                return s
+            },
+
+            async roomExists(code) {
+                const snap = await get(ref(fbDb, 'rooms/' + code));
+                return snap.exists()
+            },
+
+            async joinRoom(code, maxPlayers) {
+                const playersRef = ref(fbDb, 'rooms/' + code + '/players');
+                for (let attempt = 0; attempt < 5; attempt++) {
+                    const snap = await get(playersRef);
+                    const taken = snap.exists() ? snap.val() : {};
+                    let slot = -1;
+                    for (let i = 0; i < maxPlayers; i++) {
+                        if (!taken[i]) { slot = i; break }
+                    }
+                    if (slot === -1) return null;
+                    const slotRef = ref(fbDb, 'rooms/' + code + '/players/' + slot);
+                    await set(slotRef, { joinedAt: Date.now(), connected: !0 });
+                    onDisconnect(slotRef).update({ connected: !1, leftAt: Date.now() });
+                    const confirmSnap = await get(slotRef);
+                    if (confirmSnap.exists()) {
+                        window.FBRoom._roomCode = code;
+                        window.FBRoom._mySlotId = slot;
+                        window.FBRoom._joinedAt = Date.now();
+                        return slot
+                    }
+                }
+                return null
+            },
+
+            send(data) {
+                if (!window.FBRoom._roomCode) return;
+                const msgsRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/msgs');
+                push(msgsRef, {
+                    from: window.FBRoom._mySlotId,
+                    t: Date.now(),
+                    payload: JSON.stringify(data)
+                }).catch(() => {})
+            },
+
+            onMessage(callback) {
+                if (!window.FBRoom._roomCode) return;
+                const msgsRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/msgs');
+                const unsub = onChildAdded(msgsRef, (snap) => {
+                    const v = snap.val();
+                    if (!v || v.from === window.FBRoom._mySlotId) return;
+                    if (v.t && v.t < window.FBRoom._joinedAt - 2000) return;
+                    let payload = null;
+                    try { payload = JSON.parse(v.payload) } catch (e) { return }
+                    callback(payload, v.from)
+                });
+                window.FBRoom._msgListeners.push(unsub);
+                return unsub
+            },
+
+            onPresence(maxPlayers, callback) {
+                if (!window.FBRoom._roomCode) return;
+                const playersRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/players');
+                const unsub = onValue(playersRef, (snap) => {
+                    const v = snap.exists() ? snap.val() : {};
+                    callback(v)
+                });
+                window.FBRoom._presenceListeners.push(unsub);
+                return unsub
+            },
+
+            async leaveRoom() {
+                if (window.FBRoom._roomCode && window.FBRoom._mySlotId !== null) {
+                    try {
+                        await update(ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/players/' + window.FBRoom._mySlotId), { connected: !1, leftAt: Date.now() })
+                    } catch (e) {}
+                }
+                window.FBRoom._msgListeners.forEach(u => { try { u() } catch (e) {} });
+                window.FBRoom._presenceListeners.forEach(u => { try { u() } catch (e) {} });
+                window.FBRoom._msgListeners = [];
+                window.FBRoom._presenceListeners = [];
+                window.FBRoom._roomCode = null;
+                window.FBRoom._mySlotId = null
+            }
+        };
+
+        window.dispatchEvent(new Event('fbroom-ready'));
+    </script>
     <script>
         (function() {
             const canvas = document.getElementById('boardCanvas');
@@ -4136,6 +4414,8 @@
                     gtOfflineLabel: 'Offline',
                     gtOnlineLabel: 'Online',
                     gtLockHint4p: '4-player mode is offline only',
+                    onlineNameLockTitle: 'Name & avatar are set inside the room',
+                    onlineNameLockDesc: "After you create or join a room, you'll pick your name and avatar color in the lobby.",
                     timerSelectLabel: "Each Player's Total Time",
                     timerUnitSec: 'sec',
                     timerUnitMin: 'min',
@@ -4268,6 +4548,8 @@
                     gtOfflineLabel: 'آفلاین',
                     gtOnlineLabel: 'آنلاین',
                     gtLockHint4p: 'مود چهار نفره فقط به‌صورت آفلاین قابل بازی است',
+                    onlineNameLockTitle: 'اسم و آواتار داخل اتاق تنظیم می‌شود',
+                    onlineNameLockDesc: 'بعد از ساخت یا پیوستن به اتاق، در لابی بازی اسم و رنگ آواتارت را انتخاب می‌کنی.',
                     timerSelectLabel: 'مجموع زمان هر بازیکن',
                     timerUnitSec: 'ثانیه',
                     timerUnitMin: 'دقیقه',
@@ -4443,8 +4725,8 @@
             }
 
             function sendOnline(data) {
-                if (onlineState.conn && onlineState.conn.open) {
-                    try { onlineState.conn.send(data) } catch (e) {}
+                if (window.FBRoom && window.FBRoom._roomCode) {
+                    window.FBRoom.send(data)
                 }
             }
 
@@ -4459,8 +4741,7 @@
 
             function teardownOnline(notifyPeer) {
                 if (notifyPeer) sendOnline({ type: 'leave' });
-                if (onlineState.conn) { try { onlineState.conn.close() } catch (e) {} }
-                if (onlineState.peer) { try { onlineState.peer.destroy() } catch (e) {} }
+                if (window.FBRoom) { try { window.FBRoom.leaveRoom() } catch (e) {} }
                 onlineState.active = !1;
                 onlineState.peer = null;
                 onlineState.conn = null;
@@ -4509,83 +4790,47 @@
                 resetOnlineSetupUI()
             };
 
-            const PEER_ICE_CONFIG = {
-                iceServers: [
-                    { urls: 'stun:stun.relay.metered.ca:80' },
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'turn:global.relay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-                    { urls: 'turn:global.relay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-                    { urls: 'turn:global.relay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
-                ]
-            };
             const networkHintMsg = omsg(
-                'اتصال برقرار نشد. اگر با اینترنت همراه هستید و فیلترشکن/VPN روشن نیست، لطفاً یک‌بار VPN را روشن کن یا با وای‌فای امتحان کن.',
-                'Could not connect. If you are on mobile data without a VPN, please try turning a VPN on or switch to Wi-Fi.'
+                'اتصال برقرار نشد. لطفاً اینترنتت را چک کن و دوباره امتحان کن.',
+                'Could not connect. Please check your internet connection and try again.'
             );
 
-            function startPeer(id, onOpen) {
-                try {
-                    onlineState.peer = id ? new Peer(id, { config: PEER_ICE_CONFIG }) : new Peer({ config: PEER_ICE_CONFIG });
-                } catch (e) {
-                    onlineStatusText.textContent = omsg('خطا در راه‌اندازی اتصال اینترنتی', 'Failed to initialize online connection');
-                    onlineJoinStatus.textContent = onlineStatusText.textContent;
-                    return
-                }
-                let openedSignal = !1;
-                const signalTimeout = setTimeout(() => {
-                    if (!openedSignal) {
-                        onlineStatusText.textContent = networkHintMsg;
-                        onlineJoinStatus.textContent = networkHintMsg
-                    }
-                }, 9000);
-                onlineState.peer.on('open', (pid) => { openedSignal = !0; clearTimeout(signalTimeout); onOpen(pid) });
-                onlineState.peer.on('error', (err) => {
-                    if (err && err.type === 'unavailable-id') {
-                        try { onlineState.peer.destroy() } catch (e) {}
-                        startPeer('route9-' + genRoomCode(), onOpen);
-                        return
-                    }
-                    clearTimeout(signalTimeout);
-                    const m = (err && (err.type === 'network' || err.type === 'server-error' || err.type === 'socket-error' || err.type === 'browser-incompatible')) ?
-                        networkHintMsg : (omsg('خطا در اتصال', 'Connection error') + (err && err.type ? (': ' + err.type) : ''));
-                    onlineStatusText.textContent = m;
-                    onlineJoinStatus.textContent = m
-                });
-                onlineState.peer.on('disconnected', () => {
-                    onlineStatusText.textContent = networkHintMsg;
-                    onlineJoinStatus.textContent = networkHintMsg
+            function attachRoomMessageListener() {
+                window.FBRoom.onMessage((data) => { handleOnlineData(data) })
+            }
+
+            function attachRoomPresenceListener(maxPlayers) {
+                window.FBRoom.onPresence(maxPlayers, (playersObj) => {
+                    onOnlinePresenceChange(playersObj)
                 })
             }
 
-            document.getElementById('btn-online-create').onclick = () => {
+            document.getElementById('btn-online-create').onclick = async () => {
                 onlineChoiceView.style.display = 'none';
                 onlineCreateView.style.display = 'flex';
                 onlineCodeBox.textContent = '...';
                 onlineStatusText.textContent = omsg('در حال آماده‌سازی اتاق...', 'Setting up room...');
                 onlineState.isHost = !0;
-                startPeer('route9-' + genRoomCode(), (pid) => {
-                    onlineCodeBox.textContent = pid.replace('route9-', '');
+                try {
+                    const code = await window.FBRoom.createRoom(2);
+                    const slot = await window.FBRoom.joinRoom(code, 2);
+                    onlineState.localPlayerId = slot;
+                    onlineCodeBox.textContent = code;
                     onlineStatusText.textContent = omsg('در انتظار پیوستن حریف...', 'Waiting for opponent to join...');
-                    onlineState.peer.on('connection', (conn) => {
-                        if (onlineState.conn) { try { conn.close() } catch (e) {} return }
-                        onlineState.conn = conn;
-                        attachConnListeners(conn);
-                        let hostSettled = !1;
-                        conn.on('open', () => {
-                            hostSettled = !0;
+                    attachRoomMessageListener();
+                    attachRoomPresenceListener(2);
+                    window.FBRoom.onPresence(2, (playersObj) => {
+                        if (onlineState.active) return;
+                        if (playersObj && playersObj[1] && playersObj[1].connected && !onlineState._startSent) {
+                            onlineState._startSent = !0;
                             onlineStatusText.textContent = omsg('حریف متصل شد!', 'Opponent connected!');
-                            onlineState.localPlayerId = 0;
                             sendOnline({ type: 'start', mode: onlineState.mode, timerSeconds: onlineState.timerSeconds });
                             beginOnlineGame(onlineState.mode)
-                        });
-                        setTimeout(() => {
-                            if (!hostSettled) {
-                                onlineStatusText.textContent = networkHintMsg;
-                                onlineState.conn = null
-                            }
-                        }, 15000)
+                        }
                     })
-                })
+                } catch (e) {
+                    onlineStatusText.textContent = networkHintMsg
+                }
             };
             document.getElementById('btn-online-copy-code').onclick = () => {
                 const code = onlineCodeBox.textContent;
@@ -4612,30 +4857,36 @@
                 onlineJoinView.style.display = 'none';
                 onlineChoiceView.style.display = 'flex'
             };
-            document.getElementById('btn-online-connect').onclick = () => {
+            document.getElementById('btn-online-connect').onclick = async () => {
                 const raw = onlineJoinInput.value.trim().toUpperCase();
                 if (!raw) return;
                 onlineState.isHost = !1;
                 onlineJoinStatus.textContent = omsg('در حال اتصال...', 'Connecting...');
-                startPeer(null, () => {
-                    const conn = onlineState.peer.connect('route9-' + raw, { reliable: !0 });
-                    onlineState.conn = conn;
-                    attachConnListeners(conn);
-                    let settled = !1;
-                    conn.on('open', () => {
-                        settled = !0;
-                        onlineJoinStatus.textContent = omsg('متصل شد! در انتظار شروع بازی...', 'Connected! Waiting for the game to start...')
-                    });
-                    setTimeout(() => {
-                        if (!settled) onlineJoinStatus.textContent = networkHintMsg
-                    }, 12000)
-                })
+                try {
+                    const exists = await window.FBRoom.roomExists(raw);
+                    if (!exists) {
+                        onlineJoinStatus.textContent = omsg('اتاقی با این کد پیدا نشد', 'No room found with this code');
+                        return
+                    }
+                    const slot = await window.FBRoom.joinRoom(raw, 2);
+                    if (slot === null) {
+                        onlineJoinStatus.textContent = omsg('این اتاق پر است', 'This room is full');
+                        return
+                    }
+                    onlineState.localPlayerId = slot;
+                    onlineJoinStatus.textContent = omsg('متصل شد! در انتظار شروع بازی...', 'Connected! Waiting for the game to start...');
+                    attachRoomMessageListener();
+                    attachRoomPresenceListener(2)
+                } catch (e) {
+                    onlineJoinStatus.textContent = networkHintMsg
+                }
             };
 
-            function attachConnListeners(conn) {
-                conn.on('data', handleOnlineData);
-                conn.on('close', () => {
-                    if (!onlineState.active || onlineState.peerLeft) return;
+            function onOnlinePresenceChange(playersObj) {
+                if (!onlineState.active) return;
+                const otherSlot = onlineState.localPlayerId === 0 ? 1 : 0;
+                const other = playersObj && playersObj[otherSlot];
+                if (other && other.connected === !1 && !onlineState.peerLeft) {
                     onlineState.peerLeft = !0;
                     if (typeof gameOver !== 'undefined' && gameOver) {
                         showToast(omsg('حریف بازی را ترک کرد', 'Opponent left the game'));
@@ -4645,7 +4896,7 @@
                         teardownOnline(!1);
                         goHome()
                     }
-                })
+                }
             }
 
             function beginOnlineGame(mode) {
@@ -4661,7 +4912,6 @@
             function handleOnlineData(data) {
                 if (!data || !data.type) return;
                 if (data.type === 'start') {
-                    onlineState.localPlayerId = 1;
                     onlineState.timerSeconds = data.timerSeconds || DEFAULT_TIMER_SECONDS;
                     beginOnlineGame(data.mode);
                     return
@@ -4960,6 +5210,7 @@
                     b.dataset.color = c;
                     b.onclick = () => {
                         onlineLobby.me.color = c;
+                        localStorage.setItem('barricade-online-color', c);
                         refreshOnlineLobbySwatchUI();
                         broadcastOnlineProfile()
                     };
@@ -4971,6 +5222,7 @@
             if (onlineLobbyNameInput) {
                 onlineLobbyNameInput.oninput = (e) => {
                     onlineLobby.me.name = e.target.value.slice(0, 18);
+                    localStorage.setItem('barricade-online-name', onlineLobby.me.name);
                     broadcastOnlineProfile()
                 }
             }
@@ -4985,14 +5237,22 @@
 
             function updateOnlineCountdownUI() {
                 const el = document.getElementById('online-lobby-countdown');
-                if (el) el.textContent = localizeNum(Math.max(0, onlineLobby.secondsLeft))
+                const numEl = document.getElementById('online-lobby-countdown-num');
+                const secs = Math.max(0, onlineLobby.secondsLeft);
+                if (numEl) numEl.textContent = localizeNum(secs);
+                if (el) el.style.setProperty('--pct', Math.max(0, Math.min(100, (secs / ONLINE_LOBBY_SECONDS) * 100)))
             }
 
             function showOnlineLobby(mode) {
                 const slots = lobbySlots(mode);
                 onlineLobby.mySlot = slots.me;
                 onlineLobby.oppSlot = slots.opp;
-                onlineLobby.me = { name: currentNames[slots.me] || '', color: customColor(slots.me) };
+                const savedOnlineName = localStorage.getItem('barricade-online-name');
+                const savedOnlineColor = localStorage.getItem('barricade-online-color');
+                onlineLobby.me = {
+                    name: (savedOnlineName !== null ? savedOnlineName : (currentNames[slots.me] || '')),
+                    color: savedOnlineColor || customColor(slots.me)
+                };
                 onlineLobby.opp = { name: '', color: customColor(slots.opp) };
                 document.getElementById('mode-select-view').style.display = 'none';
                 onlineSetupView.style.display = 'none';
@@ -5102,6 +5362,8 @@
                 setTextContent('gt-offline-label', t('gtOfflineLabel'));
                 setTextContent('gt-online-label', t('gtOnlineLabel'));
                 setTextContent('game-type-lock-hint', t('gtLockHint4p'));
+                setTextContent('online-name-lock-title', t('onlineNameLockTitle'));
+                setTextContent('online-name-lock-desc', t('onlineNameLockDesc'));
                 setTextContent('timer-select-label-text', t('timerSelectLabel'));
                 setTextContent('timer-chip-none-label', t('timerNoneLabel'));
                 setTextContent('timer-online-required-hint', t('timerOnlineRequiredHint'));
@@ -5810,6 +6072,7 @@
                 document.getElementById('game-type-toggle').dataset.active = isOnline ? 'online' : 'offline';
                 document.getElementById('btn-gt-offline').classList.toggle('active', !isOnline);
                 onlineBtn.classList.toggle('active', isOnline);
+                document.getElementById('name-entry-view').classList.toggle('gt-online', isOnline);
                 updateTimerAvailabilityForGameType()
             }
             document.getElementById('btn-gt-offline').onclick = () => setGameType(!1);
@@ -5972,7 +6235,7 @@
                     const card1 = createPlayerCard(p1);
                     const vsBox = document.createElement('div');
                     vsBox.className = 'bet-box';
-                    vsBox.innerHTML = `<span class="vs-x">&times;</span>`;
+                    vsBox.innerHTML = `<span class="vs-x">VS</span>`;
                     topbarEl.append(card0, vsBox, card1);
                     const mobileTopbar = document.getElementById('topbar-4p-mobile');
                     if (mobileTopbar) mobileTopbar.remove()
@@ -5998,7 +6261,7 @@
                 teamAPlayers.forEach(p => colA.appendChild(createPlayerCard(p, !0)));
                 const vsBox = document.createElement('div');
                 vsBox.className = 'bet-box';
-                vsBox.innerHTML = `<span class="vs-x">&times;</span>`;
+                vsBox.innerHTML = `<span class="vs-x">VS</span>`;
                 const colB = document.createElement('div');
                 colB.className = 'team-col';
                 teamBPlayers.forEach(p => colB.appendChild(createPlayerCard(p, !0)));
@@ -6035,6 +6298,7 @@
                 if (mobileTeamRight) {
                     wrap.style.direction = 'ltr';
                     wrap.style.flexDirection = 'row';
+                    wrap.style.justifyContent = 'flex-end';
                     label.append(numSpan, iconSpan);
                     wrap.append(pipRow, label);
                 } else {
@@ -6060,7 +6324,9 @@
                 timeSpan.textContent = '--:--';
                 track.append(fill, timeSpan);
                 if (mobileTeamRight) {
-                    wrap.style.flexDirection = 'row-reverse';
+                    wrap.style.direction = 'ltr';
+                    wrap.style.flexDirection = 'row';
+                    wrap.style.justifyContent = 'flex-end';
                 }
                 wrap.append(iconSpan, track);
                 return wrap
@@ -6070,7 +6336,9 @@
                 const card = document.createElement('div');
                 card.className = `player-card ${p.colorClass}`;
                 card.dataset.playerId = p.id;
-                const isRightSide = (!forMobileTeamLayout && (gameMode === '2p' || gameMode === 'hunter') && p.id === 1) || (forMobileTeamLayout && p.team === 1);
+                const isTeamBIn4p = gameMode === '4p' && p.team === 1;
+                if (isTeamBIn4p) card.classList.add('team-b-align');
+                const isRightSide = (!forMobileTeamLayout && (gameMode === '2p' || gameMode === 'hunter') && p.id === 1) || (forMobileTeamLayout && p.team === 1) || isTeamBIn4p;
                 const avatar = document.createElement('div');
                 avatar.className = 'avatar';
                 avatar.style.background = p.color;
@@ -6111,8 +6379,9 @@
                         info.appendChild(proxDiv)
                     }
                 }
-                info.appendChild(createWallGauge(p, isRightSide, forMobileTeamLayout && isRightSide));
-                info.appendChild(createPlayerTimer(p, forMobileTeamLayout && isRightSide));
+                const reverseInternal = isTeamBIn4p || (forMobileTeamLayout && isRightSide);
+                info.appendChild(createWallGauge(p, isRightSide, reverseInternal));
+                info.appendChild(createPlayerTimer(p, reverseInternal));
                 card.append(avatar, info);
                 return card
             }
