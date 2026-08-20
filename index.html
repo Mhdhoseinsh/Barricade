@@ -251,6 +251,20 @@
             left: -7px
         }
         /* ===== ONLINE SCREENS ===== */
+        .forfeit-badge {
+            display: inline-block;
+            margin-inline-start: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 20px;
+            background: rgba(231, 76, 60, .18);
+            color: #E74C3C;
+            vertical-align: middle;
+        }
+        .player-card.forfeited {
+            opacity: .5;
+        }
         .online-card {
             position: relative;
             overflow: hidden
@@ -3498,6 +3512,9 @@
                 <button class="mode-btn" id="btn-online-pick-2p">
                     <div class="mode-text"><div class="t">کلاسیک ۱ در برابر ۱</div></div>
                 </button>
+                <button class="mode-btn" id="btn-online-pick-4p">
+                    <div class="mode-text"><div class="t">چهار نفره (دو تیم دونفره)</div></div>
+                </button>
                 <button class="mode-btn" id="btn-online-pick-hunter">
                     <div class="mode-text"><div class="t">شکارچی و فراری</div></div>
                 </button>
@@ -3752,10 +3769,25 @@
                     <div class="swatch-group" id="swatches-online-me"></div>
                 </div>
             </div>
-            <div class="player-setup-card online-lobby-opp-card">
+            <div class="player-setup-card online-lobby-opp-card" id="online-lobby-opp1-card">
                 <div class="name-input-row">
                     <span class="avatar-preview" id="avatar-preview-online-opp" style="background:#3498DB"></span>
                     <span id="name-online-opp" style="font-weight:700;font-size:15px;"></span>
+                    <span class="forfeit-badge" id="forfeit-badge-online-opp1" style="display:none">—</span>
+                </div>
+            </div>
+            <div class="player-setup-card online-lobby-opp-card" id="online-lobby-opp2-card" style="display:none">
+                <div class="name-input-row">
+                    <span class="avatar-preview" id="avatar-preview-online-opp2" style="background:#2ECC71"></span>
+                    <span id="name-online-opp2" style="font-weight:700;font-size:15px;"></span>
+                    <span class="forfeit-badge" id="forfeit-badge-online-opp2" style="display:none">—</span>
+                </div>
+            </div>
+            <div class="player-setup-card online-lobby-opp-card" id="online-lobby-opp3-card" style="display:none">
+                <div class="name-input-row">
+                    <span class="avatar-preview" id="avatar-preview-online-opp3" style="background:#F1C40F"></span>
+                    <span id="name-online-opp3" style="font-weight:700;font-size:15px;"></span>
+                    <span class="forfeit-badge" id="forfeit-badge-online-opp3" style="display:none">—</span>
                 </div>
             </div>
             <p id="online-lobby-hint" style="color:var(--text-muted);font-size:12px;text-align:center;margin-top:2px;">You can only change your own name and color</p>
@@ -4710,9 +4742,8 @@
             const ONLINE_LOBBY_SECONDS = 15;
             const onlineLobby = {
                 me: { name: '', color: '#E74C3C' },
-                opp: { name: '', color: '#3498DB' },
+                othersById: {},
                 mySlot: 'p1',
-                oppSlot: 'p2',
                 timer: null,
                 secondsLeft: ONLINE_LOBBY_SECONDS
             };
@@ -4774,6 +4805,11 @@
                 onlineModeSelectView.style.display = 'none';
                 onlineChoiceView.style.display = 'flex'
             };
+            document.getElementById('btn-online-pick-4p').onclick = () => {
+                onlineState.mode = '4p';
+                onlineModeSelectView.style.display = 'none';
+                onlineChoiceView.style.display = 'flex'
+            };
             document.getElementById('btn-online-pick-hunter').onclick = () => {
                 onlineState.mode = 'hunter';
                 onlineModeSelectView.style.display = 'none';
@@ -4805,25 +4841,38 @@
                 })
             }
 
+            function onlineMaxPlayers() {
+                return onlineState.mode === '4p' ? 4 : 2
+            }
+
             document.getElementById('btn-online-create').onclick = async () => {
                 onlineChoiceView.style.display = 'none';
                 onlineCreateView.style.display = 'flex';
                 onlineCodeBox.textContent = '...';
                 onlineStatusText.textContent = omsg('در حال آماده‌سازی اتاق...', 'Setting up room...');
                 onlineState.isHost = !0;
+                onlineState._startSent = !1;
+                const maxP = onlineMaxPlayers();
                 try {
-                    const code = await window.FBRoom.createRoom(2);
-                    const slot = await window.FBRoom.joinRoom(code, 2);
+                    const code = await window.FBRoom.createRoom(maxP);
+                    const slot = await window.FBRoom.joinRoom(code, maxP);
                     onlineState.localPlayerId = slot;
                     onlineCodeBox.textContent = code;
-                    onlineStatusText.textContent = omsg('در انتظار پیوستن حریف...', 'Waiting for opponent to join...');
+                    onlineStatusText.textContent = maxP === 2 ?
+                        omsg('در انتظار پیوستن حریف...', 'Waiting for opponent to join...') :
+                        omsg('در انتظار پیوستن بازیکن‌ها...', 'Waiting for players to join...');
                     attachRoomMessageListener();
-                    attachRoomPresenceListener(2);
-                    window.FBRoom.onPresence(2, (playersObj) => {
+                    attachRoomPresenceListener(maxP);
+                    window.FBRoom.onPresence(maxP, (playersObj) => {
                         if (onlineState.active) return;
-                        if (playersObj && playersObj[1] && playersObj[1].connected && !onlineState._startSent) {
+                        const others = [];
+                        for (let i = 0; i < maxP; i++) if (i !== slot) others.push(i);
+                        const allJoined = playersObj && others.every(i => playersObj[i] && playersObj[i].connected);
+                        if (allJoined && !onlineState._startSent) {
                             onlineState._startSent = !0;
-                            onlineStatusText.textContent = omsg('حریف متصل شد!', 'Opponent connected!');
+                            onlineStatusText.textContent = maxP === 2 ?
+                                omsg('حریف متصل شد!', 'Opponent connected!') :
+                                omsg('همه متصل شدند!', 'Everyone connected!');
                             sendOnline({ type: 'start', mode: onlineState.mode, timerSeconds: onlineState.timerSeconds });
                             beginOnlineGame(onlineState.mode)
                         }
@@ -4862,13 +4911,14 @@
                 if (!raw) return;
                 onlineState.isHost = !1;
                 onlineJoinStatus.textContent = omsg('در حال اتصال...', 'Connecting...');
+                const maxP = onlineMaxPlayers();
                 try {
                     const exists = await window.FBRoom.roomExists(raw);
                     if (!exists) {
                         onlineJoinStatus.textContent = omsg('اتاقی با این کد پیدا نشد', 'No room found with this code');
                         return
                     }
-                    const slot = await window.FBRoom.joinRoom(raw, 2);
+                    const slot = await window.FBRoom.joinRoom(raw, maxP);
                     if (slot === null) {
                         onlineJoinStatus.textContent = omsg('این اتاق پر است', 'This room is full');
                         return
@@ -4876,7 +4926,7 @@
                     onlineState.localPlayerId = slot;
                     onlineJoinStatus.textContent = omsg('متصل شد! در انتظار شروع بازی...', 'Connected! Waiting for the game to start...');
                     attachRoomMessageListener();
-                    attachRoomPresenceListener(2)
+                    attachRoomPresenceListener(maxP)
                 } catch (e) {
                     onlineJoinStatus.textContent = networkHintMsg
                 }
@@ -4884,19 +4934,32 @@
 
             function onOnlinePresenceChange(playersObj) {
                 if (!onlineState.active) return;
-                const otherSlot = onlineState.localPlayerId === 0 ? 1 : 0;
-                const other = playersObj && playersObj[otherSlot];
-                if (other && other.connected === !1 && !onlineState.peerLeft) {
-                    onlineState.peerLeft = !0;
-                    if (typeof gameOver !== 'undefined' && gameOver) {
-                        showToast(omsg('حریف بازی را ترک کرد', 'Opponent left the game'));
-                        refreshGameOverDialogOnlineState()
-                    } else {
-                        showToast(omsg('اتصال حریف قطع شد', 'Opponent disconnected'));
-                        teardownOnline(!1);
-                        goHome()
+                const maxP = onlineMaxPlayers();
+                for (let i = 0; i < maxP; i++) {
+                    if (i === onlineState.localPlayerId) continue;
+                    const p = players.find(pl => pl.id === i);
+                    const other = playersObj && playersObj[i];
+                    if (p && !p.forfeited && !p.finished && other && other.connected === !1) {
+                        if (gameMode === '4p') {
+                            performForfeit4p(p);
+                            showToast(fmt2(omsg('{name} از بازی خارج شد', '{name} disconnected'), playerDisplayName(p)))
+                        } else if (!onlineState.peerLeft) {
+                            onlineState.peerLeft = !0;
+                            if (typeof gameOver !== 'undefined' && gameOver) {
+                                showToast(omsg('حریف بازی را ترک کرد', 'Opponent left the game'));
+                                refreshGameOverDialogOnlineState()
+                            } else {
+                                showToast(omsg('اتصال حریف قطع شد', 'Opponent disconnected'));
+                                teardownOnline(!1);
+                                goHome()
+                            }
+                        }
                     }
                 }
+            }
+
+            function fmt2(str, name) {
+                return str.replace('{name}', name)
             }
 
             function beginOnlineGame(mode) {
@@ -4926,6 +4989,9 @@
                     } else if (data.type === 'resign') {
                         const resignedPlayer = (data.playerId !== undefined) ? players.find(p => p.id === data.playerId) : null;
                         performResign(resignedPlayer || currentPlayer())
+                    } else if (data.type === 'forfeit') {
+                        const p = players.find(p => p.id === data.playerId);
+                        if (p && !p.forfeited) performForfeit4p(p)
                     } else if (data.type === 'rematch-request') {
                         if (onlineRematch.requestedByMe) {
                             onlineRematch.requestedByMe = !1;
@@ -4941,8 +5007,8 @@
                         onlineRematch.requestedByOpponent = !1;
                         restartSameGame()
                     } else if (data.type === 'profile') {
-                        onlineLobby.opp.name = (data.name || '').slice(0, 18);
-                        if (data.color) onlineLobby.opp.color = data.color;
+                        const pid = (data.id !== undefined) ? data.id : (onlineState.localPlayerId === 0 ? 1 : 0);
+                        onlineLobby.othersById[pid] = { name: (data.name || '').slice(0, 18), color: data.color || customColor(slotNameForId(onlineState.mode, pid)) };
                         updateOnlineOppUI()
                     }
                 } finally {
@@ -5172,10 +5238,24 @@
 
             // ================= ONLINE LOBBY (live name/avatar setup, online-only) =================
             const SLOT_DPN_INDEX = { p1: 0, p2: 1, hunter: 0, escaper: 1 };
+            const FOUR_P_SLOTS = ['red', 'blue', 'green', 'yellow'];
 
             function slotPlaceholder(slot) {
                 const dpn = translations[currentLang].defaultPlayerNames;
                 return dpn[SLOT_DPN_INDEX[slot]] || dpn[0]
+            }
+
+            function slotNameForId(mode, id) {
+                if (mode === '4p') return FOUR_P_SLOTS[id];
+                if (mode === 'hunter') return id === 1 ? 'hunter' : 'escaper';
+                return id === 0 ? 'p1' : 'p2'
+            }
+
+            function lobbyOtherIds(mode) {
+                const maxP = mode === '4p' ? 4 : 2;
+                const ids = [];
+                for (let i = 0; i < maxP; i++) if (i !== onlineState.localPlayerId) ids.push(i);
+                return ids
             }
 
             function lobbySlots(mode) {
@@ -5186,7 +5266,7 @@
             }
 
             function broadcastOnlineProfile() {
-                if (onlineState.active) sendOnline({ type: 'profile', name: onlineLobby.me.name, color: onlineLobby.me.color })
+                if (onlineState.active) sendOnline({ type: 'profile', id: onlineState.localPlayerId, name: onlineLobby.me.name, color: onlineLobby.me.color })
             }
 
             function refreshOnlineLobbySwatchUI() {
@@ -5227,12 +5307,32 @@
                 }
             }
 
+            const OPP_CARD_ELS = [
+                { avatar: 'avatar-preview-online-opp', name: 'name-online-opp', card: 'online-lobby-opp1-card', badge: 'forfeit-badge-online-opp1' },
+                { avatar: 'avatar-preview-online-opp2', name: 'name-online-opp2', card: 'online-lobby-opp2-card', badge: 'forfeit-badge-online-opp2' },
+                { avatar: 'avatar-preview-online-opp3', name: 'name-online-opp3', card: 'online-lobby-opp3-card', badge: 'forfeit-badge-online-opp3' }
+            ];
+
+            function placeholderForId(mode, id) {
+                const dpn = translations[currentLang].defaultPlayerNames;
+                if (mode === '4p') return dpn[id] || dpn[0];
+                return slotPlaceholder(slotNameForId(mode, id))
+            }
+
             function updateOnlineOppUI() {
-                const avatarEl = document.getElementById('avatar-preview-online-opp');
-                if (avatarEl) avatarEl.style.background = onlineLobby.opp.color;
-                const nameEl = document.getElementById('name-online-opp');
-                if (nameEl) nameEl.textContent = (onlineLobby.opp.name && onlineLobby.opp.name.trim()) ?
-                    onlineLobby.opp.name.trim() : slotPlaceholder(onlineLobby.oppSlot)
+                const otherIds = lobbyOtherIds(onlineState.mode);
+                OPP_CARD_ELS.forEach((els, idx) => {
+                    const cardEl = document.getElementById(els.card);
+                    if (idx >= otherIds.length) { if (cardEl) cardEl.style.display = 'none'; return }
+                    if (cardEl) cardEl.style.display = '';
+                    const id = otherIds[idx];
+                    const slot = slotNameForId(onlineState.mode, id);
+                    const data = onlineLobby.othersById[id] || { name: '', color: customColor(slot) };
+                    const avatarEl = document.getElementById(els.avatar);
+                    if (avatarEl) avatarEl.style.background = data.color;
+                    const nameEl = document.getElementById(els.name);
+                    if (nameEl) nameEl.textContent = (data.name && data.name.trim()) ? data.name.trim() : placeholderForId(onlineState.mode, id)
+                })
             }
 
             function updateOnlineCountdownUI() {
@@ -5244,16 +5344,15 @@
             }
 
             function showOnlineLobby(mode) {
-                const slots = lobbySlots(mode);
-                onlineLobby.mySlot = slots.me;
-                onlineLobby.oppSlot = slots.opp;
+                const meSlot = slotNameForId(mode, onlineState.localPlayerId);
+                onlineLobby.mySlot = meSlot;
                 const savedOnlineName = localStorage.getItem('barricade-online-name');
                 const savedOnlineColor = localStorage.getItem('barricade-online-color');
                 onlineLobby.me = {
-                    name: (savedOnlineName !== null ? savedOnlineName : (currentNames[slots.me] || '')),
-                    color: savedOnlineColor || customColor(slots.me)
+                    name: (savedOnlineName !== null ? savedOnlineName : (currentNames[meSlot] || '')),
+                    color: savedOnlineColor || customColor(meSlot)
                 };
-                onlineLobby.opp = { name: '', color: customColor(slots.opp) };
+                onlineLobby.othersById = {};
                 document.getElementById('mode-select-view').style.display = 'none';
                 onlineSetupView.style.display = 'none';
                 document.getElementById('name-entry-view').style.display = 'none';
@@ -5264,7 +5363,7 @@
                 setThemeColor('#000000');
                 if (onlineLobbyNameInput) {
                     onlineLobbyNameInput.value = onlineLobby.me.name;
-                    onlineLobbyNameInput.placeholder = slotPlaceholder(slots.me)
+                    onlineLobbyNameInput.placeholder = placeholderForId(mode, onlineState.localPlayerId)
                 }
                 refreshOnlineLobbySwatchUI();
                 updateOnlineOppUI();
@@ -5288,14 +5387,18 @@
                 if (lobbyView) lobbyView.style.display = 'none';
                 initGame(mode);
                 const meP = players.find(p => p.id === onlineState.localPlayerId);
-                const oppP = players.find(p => p.id !== onlineState.localPlayerId);
                 if (meP) {
                     meP.customName = onlineLobby.me.name;
                     meP.color = onlineLobby.me.color
                 }
-                if (oppP) {
-                    oppP.customName = onlineLobby.opp.name;
-                    oppP.color = onlineLobby.opp.color
+                for (const idStr in onlineLobby.othersById) {
+                    const id = parseInt(idStr, 10);
+                    const p = players.find(pl => pl.id === id);
+                    const data = onlineLobby.othersById[id];
+                    if (p && data) {
+                        p.customName = data.name;
+                        p.color = data.color
+                    }
                 }
                 renderTopbar();
                 updateScores();
@@ -5888,7 +5991,8 @@
                     maxWalls: 6,
                     target: 'row8',
                     team: 0,
-                    finished: !1
+                    finished: !1,
+                    forfeited: !1
                 }, {
                     id: 1,
                     name: 'Blue',
@@ -5901,7 +6005,8 @@
                     maxWalls: 6,
                     target: 'row8',
                     team: 0,
-                    finished: !1
+                    finished: !1,
+                    forfeited: !1
                 }, {
                     id: 2,
                     name: 'Green',
@@ -5914,7 +6019,8 @@
                     maxWalls: 6,
                     target: 'row0',
                     team: 1,
-                    finished: !1
+                    finished: !1,
+                    forfeited: !1
                 }, {
                     id: 3,
                     name: 'Yellow',
@@ -5927,7 +6033,8 @@
                     maxWalls: 6,
                     target: 'row0',
                     team: 1,
-                    finished: !1
+                    finished: !1,
+                    forfeited: !1
                 }, ];
                 turnOrder = [0, 2, 1, 3]
             }
@@ -6081,7 +6188,7 @@
             function updateGameTypeAvailability(mode) {
                 const onlineBtn = document.getElementById('btn-gt-online');
                 const lockHint = document.getElementById('game-type-lock-hint');
-                const locked = (mode === '4p');
+                const locked = !1;
                 onlineBtn.disabled = locked;
                 onlineBtn.classList.toggle('locked', locked);
                 lockHint.style.display = locked ? 'block' : 'none';
@@ -6155,7 +6262,7 @@
                 document.getElementById('mode-select-view').style.display = 'block'
             };
             document.getElementById('btn-name-confirm').onclick = () => {
-                if (selectedGameTypeOnline && selectedMode !== '4p') {
+                if (selectedGameTypeOnline) {
                     onlineState.mode = selectedMode;
                     onlineState.timerSeconds = selectedTimerSeconds;
                     onlineEntryFromNameEntry = !0;
@@ -6217,12 +6324,37 @@
                     setTimeout(() => showGameOverDialog(null, null, winTeam), 50)
                 }
             }
+            function performForfeit4p(player) {
+                player.forfeited = !0;
+                const mate = players.find(p => p.team === player.team && p.id !== player.id);
+                const bothOut = !mate || mate.forfeited;
+                if (bothOut) {
+                    gameOver = !0;
+                    updateActivePlayerUI();
+                    renderTopbar();
+                    draw();
+                    setTimeout(() => showGameOverDialog(null, null, player.team === 0 ? 1 : 0), 50);
+                    return
+                }
+                if (currentPlayer() && currentPlayer().id === player.id) {
+                    advanceTurn()
+                }
+                updateActivePlayerUI();
+                renderTopbar();
+                draw()
+            }
+
             btnResign.onclick = async () => {
                 if (gameOver || isAnimating) return;
                 const player = onlineState.active ? (players.find(p => p.id === onlineState.localPlayerId) || currentPlayer()) : currentPlayer();
                 if (!(await showConfirmDialog(fmt(t('confirmResign'), { name: playerDisplayName(player) }), t('confirmResignYes'), t('confirmResignNo')))) return;
-                performResign(player);
-                if (onlineState.active) sendOnline({ type: 'resign', playerId: player.id })
+                if (onlineState.active && gameMode === '4p') {
+                    performForfeit4p(player);
+                    sendOnline({ type: 'forfeit', playerId: player.id })
+                } else {
+                    performResign(player);
+                    if (onlineState.active) sendOnline({ type: 'resign', playerId: player.id })
+                }
             };
 
             function renderTopbar() {
@@ -6356,6 +6488,13 @@
                 const nameDiv = document.createElement('div');
                 nameDiv.className = 'name';
                 nameDiv.textContent = playerDisplayName(p);
+                if (p.forfeited) {
+                    card.classList.add('forfeited');
+                    const badge = document.createElement('span');
+                    badge.className = 'forfeit-badge';
+                    badge.textContent = omsg('انصراف داد', 'Forfeited');
+                    nameDiv.appendChild(badge)
+                }
                 info.appendChild(nameDiv);
                 if (gameMode === '4p') {
                     const teamDiv = document.createElement('div');
@@ -7282,12 +7421,12 @@
             function advanceTurn() {
                 if (gameOver) return;
                 let attempts = 0;
-                const allFinished = players.every(p => p.finished);
+                const allFinished = players.every(p => p.finished || p.forfeited);
                 if (allFinished) return;
                 do {
                     turnIndex = (turnIndex + 1) % turnOrder.length;
                     attempts++
-                } while (players[turnOrder[turnIndex]].finished && attempts <= turnOrder.length);
+                } while ((players[turnOrder[turnIndex]].finished || players[turnOrder[turnIndex]].forfeited) && attempts <= turnOrder.length);
                 turn = turnOrder[turnIndex]
             }
 
