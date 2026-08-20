@@ -4073,9 +4073,6 @@
             getDatabase, ref, set, get, push, remove, update, runTransaction,
             onChildAdded, onValue, onDisconnect, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
-        import {
-            getAuth, signInAnonymously, onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDZNATL758Kbw4vmdtNArwEE3Go_OsNXMU",
@@ -4089,24 +4086,9 @@
 
         const fbApp = initializeApp(firebaseConfig);
         const fbDb = getDatabase(fbApp);
-        const fbAuth = getAuth(fbApp);
-
-        // با توجه به Rules دیتابیس که auth != null لازم دارند، قبل از هر عملیاتی
-        // باید کاربر با Anonymous Auth وارد شده باشد. این پرامیس تا وقتی که
-        // uid آماده نشده صبر می‌کند و بقیه‌ی توابع قبل از کار با آن await می‌شوند.
-        const authReady = Promise.race([
-            new Promise((resolve, reject) => {
-                const unsub = onAuthStateChanged(fbAuth, (user) => {
-                    if (user) { unsub(); resolve(user) }
-                }, reject);
-                signInAnonymously(fbAuth).catch(reject)
-            }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('auth-timeout: sign-in did not complete within 10s (check Anonymous provider + Authorized domains in Firebase Console)')), 10000))
-        ]);
 
         window.FBRoom = {
             db: fbDb,
-            auth: fbAuth,
             ref, set, get, push, remove, update, onChildAdded, onValue, onDisconnect, serverTimestamp, runTransaction,
 
             _roomCode: null,
@@ -4116,7 +4098,6 @@
             _joinedAt: 0,
 
             async createRoom(maxPlayers) {
-                await authReady;
                 const code = window.FBRoom._genCode();
                 const roomRef = ref(fbDb, 'rooms/' + code);
                 await set(roomRef, {
@@ -4135,14 +4116,11 @@
             },
 
             async roomExists(code) {
-                await authReady;
                 const snap = await get(ref(fbDb, 'rooms/' + code));
                 return snap.exists()
             },
 
             async joinRoom(code, maxPlayers) {
-                const user = await authReady;
-                const myUid = user.uid;
                 const playersRef = ref(fbDb, 'rooms/' + code + '/players');
                 let claimedSlot = -1;
                 const result = await runTransaction(playersRef, (current) => {
@@ -4153,7 +4131,7 @@
                     }
                     if (slot === -1) return; // abort, room full — undefined aborts the transaction
                     claimedSlot = slot;
-                    taken[slot] = { uid: myUid, joinedAt: Date.now(), connected: !0 };
+                    taken[slot] = { joinedAt: Date.now(), connected: !0 };
                     return taken
                 });
                 if (!result.committed || claimedSlot === -1) return null;
