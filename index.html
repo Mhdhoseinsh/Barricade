@@ -814,12 +814,6 @@
                 gap: 6px
             }
         }
-        .online-spinner-sm {
-            width: 16px;
-            height: 16px;
-            border-width: 2px;
-            margin: 0
-        }
         .online-join-status-row {
             display: flex;
             align-items: center;
@@ -913,9 +907,6 @@
             text-align: center;
             line-height: 1.5;
             animation: fieldPopIn .3s cubic-bezier(.34, 1.56, .64, 1) both
-        }
-        #timer-online-required-hint {
-            margin: 12px 0 0
         }
         .timer-select-wrap {
             background: #0c1015;
@@ -1668,10 +1659,6 @@
         .icon-svg.sm {
             width: 14px;
             height: 14px
-        }
-        .icon-svg.lg {
-            width: 26px;
-            height: 26px
         }
         .control-btn.danger {
             background: #8b2020;
@@ -2994,6 +2981,24 @@
         #name-entry-view.gt-online .online-name-lock-info {
             display: flex
         }
+        /* Room-code field lives next to the timer settings and only makes
+           sense once "Online" is selected on this same screen. */
+        .online-code-entry-wrap {
+            display: none
+        }
+        #name-entry-view.gt-online .online-code-entry-wrap {
+            display: block
+        }
+        .online-code-entry-wrap .online-code-input {
+            margin-bottom: 0
+        }
+        /* When the join screen was reached with a code already typed on the
+           settings screen, skip the redundant manual OTP re-entry / Connect
+           button and go straight to a connecting status. */
+        #online-join-view.autoconnecting .otp-wrap,
+        #online-join-view.autoconnecting #btn-online-connect {
+            display: none
+        }
         #name-entry-view.gt-online #name-fields-2p,
         #name-entry-view.gt-online #name-fields-4p,
         #name-entry-view.gt-online #name-fields-hunter {
@@ -3699,7 +3704,6 @@
                     <button class="timer-chip" data-secs="300" type="button"><span class="tc-num">۵</span><span class="tc-unit" data-unit="min">دقیقه</span></button>
                     <button class="timer-chip" data-secs="600" type="button"><span class="tc-num">۱۰</span><span class="tc-unit" data-unit="min">دقیقه</span></button>
                 </div>
-                <p class="game-type-lock-hint" id="timer-online-required-hint" style="display:none"></p>
             </div>
             <div class="player-count-toggle" id="player-count-toggle" data-active="2" style="display:none">
                 <span class="pc-toggle-slider"></span>
@@ -3726,11 +3730,18 @@
                     <span id="pc-4-label">4 Players</span>
                 </button>
             </div>
+            <div class="timer-select-wrap online-code-entry-wrap" id="online-code-entry-wrap">
+                <div class="timer-select-label">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M10.5 13.5L20 4M14 4h6v6"/><path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/></svg>
+                    <span id="online-code-entry-label-text">پیوستن با کد</span>
+                </div>
+                <input type="text" id="online-name-entry-code" class="online-code-input" maxlength="5" autocomplete="off" inputmode="text" dir="ltr" placeholder="CYRU5">
+            </div>
             <div id="name-fields-2p" style="display:none">
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-p1" style="background:#E74C3C"></span>
-                        <input type="text" id="input-name-p1" maxlength="15" placeholder="Player 1 (Red)">
+                        <input type="text" id="input-name-p1" maxlength="13" placeholder="Player 1 (Red)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-p1"></div>
@@ -3739,7 +3750,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-p2" style="background:#3498DB"></span>
-                        <input type="text" id="input-name-p2" maxlength="15" placeholder="Player 2 (Blue)">
+                        <input type="text" id="input-name-p2" maxlength="13" placeholder="Player 2 (Blue)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-p2"></div>
@@ -3755,7 +3766,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-red" style="background:#E74C3C"></span>
-                            <input type="text" id="input-name-red" maxlength="15" placeholder="Red">
+                            <input type="text" id="input-name-red" maxlength="13" placeholder="Red">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-red"></div>
@@ -3764,7 +3775,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-blue" style="background:#3498DB"></span>
-                            <input type="text" id="input-name-blue" maxlength="15" placeholder="Blue">
+                            <input type="text" id="input-name-blue" maxlength="13" placeholder="Blue">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-blue"></div>
@@ -3780,7 +3791,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-green" style="background:#2ECC71"></span>
-                            <input type="text" id="input-name-green" maxlength="15" placeholder="Green">
+                            <input type="text" id="input-name-green" maxlength="13" placeholder="Green">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-green"></div>
@@ -3789,7 +3800,7 @@
                     <div class="player-setup-card">
                         <div class="name-input-row">
                             <span class="avatar-preview" id="avatar-preview-yellow" style="background:#F1C40F"></span>
-                            <input type="text" id="input-name-yellow" maxlength="15" placeholder="Yellow">
+                            <input type="text" id="input-name-yellow" maxlength="13" placeholder="Yellow">
                         </div>
                         <div class="customize-row">
                             <div class="swatch-group" id="swatches-yellow"></div>
@@ -3801,7 +3812,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-hunter" style="background:#E74C3C"></span>
-                        <input type="text" id="input-name-hunter" maxlength="15" placeholder="Hunter (Red)">
+                        <input type="text" id="input-name-hunter" maxlength="13" placeholder="Hunter (Red)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-hunter"></div>
@@ -3810,7 +3821,7 @@
                 <div class="player-setup-card">
                     <div class="name-input-row">
                         <span class="avatar-preview" id="avatar-preview-escaper" style="background:#3498DB"></span>
-                        <input type="text" id="input-name-escaper" maxlength="15" placeholder="Escaper (Blue)">
+                        <input type="text" id="input-name-escaper" maxlength="13" placeholder="Escaper (Blue)">
                     </div>
                     <div class="customize-row">
                         <div class="swatch-group" id="swatches-escaper"></div>
@@ -3830,7 +3841,7 @@
             <div class="player-setup-card">
                 <div class="name-input-row">
                     <span class="avatar-preview" id="avatar-preview-online-me" style="background:#E74C3C"></span>
-                    <input type="text" id="input-name-online-me" maxlength="15" placeholder="">
+                    <input type="text" id="input-name-online-me" maxlength="13" placeholder="">
                 </div>
                 <div class="customize-row">
                     <div class="swatch-group" id="swatches-online-me"></div>
@@ -4504,7 +4515,7 @@
                     timerUnitSec: 'sec',
                     timerUnitMin: 'min',
                     timerNoneLabel: 'No timer',
-                    timerOnlineRequiredHint: 'Online mode requires a timer — pick a duration',
+                    onlineCodeEntryLabel: 'Join with Code',
                     timeUpToast: "{name}'s time ran out — turn forfeited"
                 },
                 fa: {
@@ -4607,7 +4618,7 @@
                     resignTeamWinner: '{name} انصراف داد! تیم {team} برنده شد!',
                     confirmNewGame: 'به خانه بازگردید؟ پیشرفت فعلی از بین می‌رود.',
                     confirmRepeat: 'همین بازی با همین بازیکنان دوباره تکرار شود؟',
-                    nameEntryTitle: 'اسم بازیکنان را وارد کنید',
+                    nameEntryTitle: 'برای شروع، اسم بازیکنان روت ۹ را وارد کنید',
                     startGameBtn: 'شروع بازی',
                     backBtn: 'بازگشت',
                     toastNoWalls: 'دیگر دیواری برای گذاشتن ندارید!',
@@ -4653,7 +4664,7 @@
                     timerUnitSec: 'ثانیه',
                     timerUnitMin: 'دقیقه',
                     timerNoneLabel: 'بدون تایمر',
-                    timerOnlineRequiredHint: 'در حالت آنلاین انتخاب تایمر اجباری است — یک زمان انتخاب کن',
+                    onlineCodeEntryLabel: 'پیوستن با کد',
                     timeUpToast: 'وقت {name} تمام شد و نوبتش از دست رفت'
                 }
             };
@@ -4695,16 +4706,6 @@
             function setTextContent(elId, text) {
                 const el = document.getElementById(elId);
                 if (el) el.textContent = text
-            }
-
-            function escapeHTML(str) {
-                return String(str).replace(/[&<>"]/g, function(m) {
-                    if (m === '&') return '&amp;';
-                    if (m === '<') return '&lt;';
-                    if (m === '>') return '&gt;';
-                    if (m === '"') return '&quot;';
-                    return m
-                })
             }
 
             function showToast(message) {
@@ -4786,6 +4787,15 @@
             const onlineCodeBox = document.getElementById('online-code-box');
             const onlineJoinInput = document.getElementById('online-join-input');
             const onlineJoinStatus = document.getElementById('online-join-status');
+            // Room-code field that now lives on the settings screen (next to
+            // the timer picker) instead of its own separate "Join with code"
+            // step — typing a code here and confirming connects directly.
+            const onlineNameEntryCodeInput = document.getElementById('online-name-entry-code');
+            if (onlineNameEntryCodeInput) {
+                onlineNameEntryCodeInput.addEventListener('input', () => {
+                    onlineNameEntryCodeInput.value = onlineNameEntryCodeInput.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 5)
+                })
+            }
 
             // ===== OTP-style room-code boxes: keep them in sync with the hidden #online-join-input =====
             const otpBoxes = Array.from(document.querySelectorAll('.otp-box'));
@@ -4863,15 +4873,9 @@
                 othersById: {},
                 mySlot: 'p1',
                 timer: null,
-                secondsLeft: ONLINE_LOBBY_SECONDS
+                secondsLeft: ONLINE_LOBBY_SECONDS,
+                deadline: null
             };
-
-            function genRoomCode() {
-                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                let s = '';
-                for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
-                return s
-            }
 
             function sendOnline(data) {
                 if (window.FBRoom && window.FBRoom._roomCode) {
@@ -4884,8 +4888,19 @@
                 onlineChoiceView.style.display = 'none';
                 onlineCreateView.style.display = 'none';
                 onlineJoinView.style.display = 'none';
+                onlineJoinView.classList.remove('autoconnecting');
                 otpClear();
                 onlineJoinStatus.textContent = ''
+            }
+
+            // Back out of the create/join waiting screens to the settings
+            // screen (timer + room-code field), so the player can fix the
+            // code or change the timer and try again — this replaces the
+            // old "back to the create/join picker" behavior, since that
+            // in-between picker screen is no longer part of the flow.
+            function backToOnlineSettings() {
+                onlineSetupView.style.display = 'none';
+                document.getElementById('name-entry-view').style.display = 'block'
             }
 
             function teardownOnline(notifyPeer) {
@@ -4918,21 +4933,19 @@
                 onlineSetupView.style.display = 'block';
                 resetOnlineSetupUI()
             };
-            document.getElementById('btn-online-pick-2p').onclick = () => {
-                onlineState.mode = '2p';
-                onlineModeSelectView.style.display = 'none';
-                onlineChoiceView.style.display = 'flex'
-            };
-            document.getElementById('btn-online-pick-4p').onclick = () => {
-                onlineState.mode = '4p';
-                onlineModeSelectView.style.display = 'none';
-                onlineChoiceView.style.display = 'flex'
-            };
-            document.getElementById('btn-online-pick-hunter').onclick = () => {
-                onlineState.mode = 'hunter';
-                onlineModeSelectView.style.display = 'none';
-                onlineChoiceView.style.display = 'flex'
-            };
+            // Picking a mode here now goes straight to the settings screen
+            // (timer + room-code field) instead of an extra "create or join"
+            // picker screen — one less step, and it's where the code field
+            // lives now.
+            function enterOnlinePresetSettings(mode) {
+                onlineState.mode = mode;
+                onlineSetupView.style.display = 'none';
+                showNameEntry(mode, mode !== 'hunter');
+                setGameType(!0)
+            }
+            document.getElementById('btn-online-pick-2p').onclick = () => enterOnlinePresetSettings('2p');
+            document.getElementById('btn-online-pick-4p').onclick = () => enterOnlinePresetSettings('4p');
+            document.getElementById('btn-online-pick-hunter').onclick = () => enterOnlinePresetSettings('hunter');
             document.getElementById('btn-online-back1').onclick = () => {
                 onlineSetupView.style.display = 'none';
                 if (onlineEntryFromNameEntry) {
@@ -4963,7 +4976,11 @@
                 return onlineState.mode === '4p' ? 4 : 2
             }
 
-            document.getElementById('btn-online-create').onclick = async () => {
+            // Create-room flow, now reached directly from the settings screen
+            // (name-entry-view) when the room-code field was left empty —
+            // the separate "Create room" card/screen is no longer a required
+            // step in between.
+            async function startOnlineCreateFlow() {
                 onlineChoiceView.style.display = 'none';
                 onlineCreateView.style.display = 'flex';
                 onlineCodeBox.textContent = '...';
@@ -4998,7 +5015,8 @@
                 } catch (e) {
                     onlineStatusText.textContent = networkHintMsg + '\n[debug: ' + (e && (e.code || e.message) || e) + ']'
                 }
-            };
+            }
+            document.getElementById('btn-online-create').onclick = startOnlineCreateFlow;
             document.getElementById('btn-online-copy-code').onclick = () => {
                 const code = onlineCodeBox.textContent;
                 if (code && navigator.clipboard) {
@@ -5013,36 +5031,40 @@
             document.getElementById('btn-online-cancel-create').onclick = () => {
                 teardownOnline(!1);
                 onlineCreateView.style.display = 'none';
-                onlineChoiceView.style.display = 'flex'
+                backToOnlineSettings()
             };
             document.getElementById('btn-online-join').onclick = () => {
                 onlineChoiceView.style.display = 'none';
                 onlineJoinView.style.display = 'flex';
+                onlineJoinView.classList.remove('autoconnecting');
                 otpClear();
                 setTimeout(() => otpBoxes[0] && otpBoxes[0].focus(), 60)
             };
             document.getElementById('btn-online-cancel-join').onclick = () => {
                 teardownOnline(!1);
                 onlineJoinView.style.display = 'none';
-                onlineChoiceView.style.display = 'flex'
+                onlineJoinView.classList.remove('autoconnecting');
+                backToOnlineSettings()
             };
-            document.getElementById('btn-online-connect').onclick = async () => {
-                const raw = onlineJoinInput.value.trim().toUpperCase();
-                if (raw.length < 5) { otpShakeError(); return }
+            // Join-room flow. `code` normally comes straight from the
+            // room-code field on the settings screen; `fromOtp` is used by
+            // the (now-fallback) manual OTP boxes so their own error-shake
+            // still works if that path is ever reached.
+            async function startOnlineJoinFlow(code, fromOtp) {
                 onlineState.isHost = !1;
                 onlineJoinStatus.textContent = omsg('در حال اتصال...', 'Connecting...');
                 const maxP = onlineMaxPlayers();
                 try {
-                    const exists = await window.FBRoom.roomExists(raw);
+                    const exists = await window.FBRoom.roomExists(code);
                     if (!exists) {
                         onlineJoinStatus.textContent = omsg('اتاقی با این کد پیدا نشد', 'No room found with this code');
-                        otpShakeError();
+                        if (fromOtp) otpShakeError();
                         return
                     }
-                    const slot = await window.FBRoom.joinRoom(raw, maxP);
+                    const slot = await window.FBRoom.joinRoom(code, maxP);
                     if (slot === null) {
                         onlineJoinStatus.textContent = omsg('این اتاق پر است', 'This room is full');
-                        otpShakeError();
+                        if (fromOtp) otpShakeError();
                         return
                     }
                     onlineState.localPlayerId = slot;
@@ -5052,6 +5074,13 @@
                 } catch (e) {
                     onlineJoinStatus.textContent = networkHintMsg + '\n[debug: ' + (e && (e.code || e.message) || e) + ']'
                 }
+            }
+            document.getElementById('btn-online-connect').onclick = () => {
+                const raw = onlineJoinInput.value.trim().toUpperCase();
+                if (raw.length < 5) { otpShakeError(); return }
+                onlineChoiceView.style.display = 'none';
+                onlineJoinView.style.display = 'flex';
+                startOnlineJoinFlow(raw, !0)
             };
 
             function onOnlinePresenceChange(playersObj) {
@@ -5130,7 +5159,7 @@
                         restartSameGame()
                     } else if (data.type === 'profile') {
                         const pid = (data.id !== undefined) ? data.id : (onlineState.localPlayerId === 0 ? 1 : 0);
-                        onlineLobby.othersById[pid] = { name: (data.name || '').slice(0, 15), color: data.color || customColor(slotNameForId(onlineState.mode, pid)) };
+                        onlineLobby.othersById[pid] = { name: (data.name || '').slice(0, 13), color: data.color || customColor(slotNameForId(onlineState.mode, pid)) };
                         updateOnlineOppUI()
                     }
                 } finally {
@@ -5167,11 +5196,20 @@
             // not a per-turn reset. Only the current player's bank ticks down; it pauses
             // on their opponent's turn and resumes exactly where it left off.
             const DEFAULT_TIMER_SECONDS = 120;
-            let selectedGameTypeOnline = false;
-            let selectedTimerSeconds = DEFAULT_TIMER_SECONDS;
-            let currentTurnTimerSeconds = DEFAULT_TIMER_SECONDS;
+            let selectedGameTypeOnline = localStorage.getItem('barricade-online-pref') === '1';
+            let selectedTimerSeconds = parseInt(localStorage.getItem('barricade-timer-pref'), 10) || DEFAULT_TIMER_SECONDS;
+            let currentTurnTimerSeconds = selectedTimerSeconds;
             let turnTimerInterval = null;
             let turnTimerPlayerId = null;
+            // Absolute real-world timestamp (Date.now()) at which the current
+            // player's time bank hits zero. We always recompute the remaining
+            // time from this fixed target instead of subtracting 1 on every
+            // tick, so the displayed number can never drift out of sync with
+            // real elapsed time — regardless of setInterval jitter, a
+            // backgrounded/throttled tab, or a device that briefly slept.
+            // This is what keeps the two players' clocks (and two devices)
+            // agreeing with each other instead of slowly falling behind.
+            let turnTimerDeadline = null;
             let onlineEntryFromNameEntry = false;
 
             function timerIsEnabled() {
@@ -5218,20 +5256,39 @@
                 })
             }
 
+            function tickTurnTimer() {
+                const p = currentPlayer();
+                if (!p) { stopTurnTimer(); return }
+                // Recompute remaining time from the fixed deadline every tick —
+                // never from "previous value minus one" — so any delay in when
+                // this tick actually fired (throttled background tab, slow
+                // device, etc.) is automatically corrected instead of
+                // accumulating into drift.
+                const remainingMs = turnTimerDeadline - Date.now();
+                const remainingSecs = Math.max(0, Math.ceil(remainingMs / 1000));
+                if (p.timeBank !== remainingSecs) {
+                    p.timeBank = remainingSecs;
+                    renderAllPlayerClocks()
+                }
+                if (remainingMs <= 0) {
+                    stopTurnTimer();
+                    handleTurnTimeout()
+                }
+            }
+
             function startTurnTimer() {
                 stopTurnTimer();
                 if (!timerIsEnabled() || gameOver) { renderAllPlayerClocks(); return }
+                const p = currentPlayer();
+                if (!p) { renderAllPlayerClocks(); return }
+                const bank = (p.timeBank != null) ? p.timeBank : currentTurnTimerSeconds;
+                turnTimerDeadline = Date.now() + bank * 1000;
                 renderAllPlayerClocks();
-                turnTimerInterval = setInterval(() => {
-                    const p = currentPlayer();
-                    if (!p) { stopTurnTimer(); return }
-                    p.timeBank = Math.max(0, (p.timeBank != null ? p.timeBank : currentTurnTimerSeconds) - 1);
-                    renderAllPlayerClocks();
-                    if (p.timeBank <= 0) {
-                        stopTurnTimer();
-                        handleTurnTimeout()
-                    }
-                }, 1000)
+                // Ticking more often than once a second just means the on-screen
+                // number and the progress bar update smoothly; the actual
+                // countdown accuracy comes from the deadline check above, not
+                // from this interval's timing.
+                turnTimerInterval = setInterval(tickTurnTimer, 250)
             }
 
             function syncTurnTimer() {
@@ -5251,6 +5308,18 @@
                     renderAllPlayerClocks()
                 }
             }
+
+            // If the tab was backgrounded (screen off, switched app, etc.),
+            // browsers throttle or fully pause timers. The moment the tab is
+            // visible again, force an immediate recompute instead of waiting
+            // for the next tick, so the number snaps to the correct value
+            // right away rather than sitting stale for a second.
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    if (turnTimerInterval) tickTurnTimer();
+                    if (onlineLobby.timer) tickOnlineLobbyCountdown()
+                }
+            });
 
             function handleTurnTimeout() {
                 if (gameOver) return;
@@ -5316,10 +5385,6 @@
                 return (currentCustom[slot] && currentCustom[slot].color) || DEFAULT_COLOR_FOR[slot]
             }
 
-            function customBackground(slot) {
-                return customColor(slot)
-            }
-
             function refreshSwatchUI(slot) {
                 const avatarEl = document.getElementById('avatar-preview-' + slot);
                 if (avatarEl) {
@@ -5380,13 +5445,6 @@
                 return ids
             }
 
-            function lobbySlots(mode) {
-                if (mode === 'hunter') {
-                    return onlineState.localPlayerId === 0 ? { me: 'escaper', opp: 'hunter' } : { me: 'hunter', opp: 'escaper' }
-                }
-                return onlineState.localPlayerId === 0 ? { me: 'p1', opp: 'p2' } : { me: 'p2', opp: 'p1' }
-            }
-
             function broadcastOnlineProfile() {
                 if (onlineState.active) sendOnline({ type: 'profile', id: onlineState.localPlayerId, name: onlineLobby.me.name, color: onlineLobby.me.color })
             }
@@ -5423,7 +5481,7 @@
             const onlineLobbyNameInput = document.getElementById('input-name-online-me');
             if (onlineLobbyNameInput) {
                 onlineLobbyNameInput.oninput = (e) => {
-                    onlineLobby.me.name = e.target.value.slice(0, 15);
+                    onlineLobby.me.name = e.target.value.slice(0, 13);
                     localStorage.setItem('barricade-online-name', onlineLobby.me.name);
                     broadcastOnlineProfile()
                 }
@@ -5491,17 +5549,28 @@
                 updateOnlineOppUI();
                 broadcastOnlineProfile();
                 onlineLobby.secondsLeft = ONLINE_LOBBY_SECONDS;
+                // Deadline-based, same reasoning as the in-game turn timer: each
+                // player's browser starts this lobby countdown at a slightly
+                // different real moment (network delay in receiving "start"),
+                // and a plain "subtract 1 every 1000ms" timer drifts further
+                // from there. Anchoring to a fixed real-world deadline keeps it
+                // accurate and keeps both players landing in the game together.
+                onlineLobby.deadline = Date.now() + ONLINE_LOBBY_SECONDS * 1000;
                 updateOnlineCountdownUI();
                 if (onlineLobby.timer) clearInterval(onlineLobby.timer);
-                onlineLobby.timer = setInterval(() => {
-                    onlineLobby.secondsLeft--;
-                    updateOnlineCountdownUI();
-                    if (onlineLobby.secondsLeft <= 0) {
-                        clearInterval(onlineLobby.timer);
-                        onlineLobby.timer = null;
-                        finalizeOnlineLobby(mode)
-                    }
-                }, 1000)
+                onlineLobby.timer = setInterval(tickOnlineLobbyCountdown, 250)
+            }
+
+            function tickOnlineLobbyCountdown() {
+                const mode = onlineState.mode;
+                const remainingMs = onlineLobby.deadline - Date.now();
+                onlineLobby.secondsLeft = Math.max(0, Math.ceil(remainingMs / 1000));
+                updateOnlineCountdownUI();
+                if (remainingMs <= 0) {
+                    clearInterval(onlineLobby.timer);
+                    onlineLobby.timer = null;
+                    finalizeOnlineLobby(mode)
+                }
             }
 
             function finalizeOnlineLobby(mode) {
@@ -5608,7 +5677,8 @@
                 setTextContent('online-name-lock-desc', t('onlineNameLockDesc'));
                 setTextContent('timer-select-label-text', t('timerSelectLabel'));
                 setTextContent('timer-chip-none-label', t('timerNoneLabel'));
-                setTextContent('timer-online-required-hint', t('timerOnlineRequiredHint'));
+                setTextContent('online-code-entry-label-text', t('onlineCodeEntryLabel'));
+                if (onlineNameEntryCodeInput) onlineNameEntryCodeInput.placeholder = 'CYRU5';
                 document.querySelectorAll('.tc-unit').forEach(el => {
                     el.textContent = el.dataset.unit === 'sec' ? t('timerUnitSec') : t('timerUnitMin')
                 });
@@ -6224,10 +6294,6 @@
                 return getDefaultPlayerName(p)
             }
 
-            function teamName(team) {
-                return translations[currentLang].teamNames[team]
-            }
-
             function teamPlayerNames(team) {
                 const sep = currentLang === 'fa' ? ' و ' : ' & ';
                 return players.filter(p => p.team === team).map(playerDisplayName).join(sep)
@@ -6297,19 +6363,11 @@
                 if (soundBtnHeader) soundBtnHeader.classList.add('visible');
                 sfxGameStart()
             }
-            let classicSubMode = '2p';
+            let classicSubMode = localStorage.getItem('barricade-mode-pref') === '4p' ? '4p' : '2p';
             document.getElementById('btn-start-classic').onclick = () => showNameEntry(classicSubMode, !0);
             document.getElementById('btn-start-hunter').onclick = () => showNameEntry('hunter');
-            document.getElementById('btn-pc-2').onclick = () => switchClassicSubMode('2p');
-            document.getElementById('btn-pc-4').onclick = () => switchClassicSubMode('4p');
-
-            function playCardAnimation() {
-                const card = document.getElementById('name-entry-view');
-                if (!card) return;
-                card.classList.remove('card-anim');
-                void card.offsetWidth;
-                card.classList.add('card-anim')
-            }
+            document.getElementById('btn-pc-2').onclick = () => { switchClassicSubMode('2p'); localStorage.setItem('barricade-mode-pref', '2p') };
+            document.getElementById('btn-pc-4').onclick = () => { switchClassicSubMode('4p'); localStorage.setItem('barricade-mode-pref', '4p') };
 
             function setGameType(isOnline) {
                 const onlineBtn = document.getElementById('btn-gt-online');
@@ -6321,8 +6379,8 @@
                 document.getElementById('name-entry-view').classList.toggle('gt-online', isOnline);
                 updateTimerAvailabilityForGameType()
             }
-            document.getElementById('btn-gt-offline').onclick = () => setGameType(!1);
-            document.getElementById('btn-gt-online').onclick = () => setGameType(!0);
+            document.getElementById('btn-gt-offline').onclick = () => { setGameType(!1); localStorage.setItem('barricade-online-pref', '0') };
+            document.getElementById('btn-gt-online').onclick = () => { setGameType(!0); localStorage.setItem('barricade-online-pref', '1') };
 
             function updateGameTypeAvailability(mode) {
                 const onlineBtn = document.getElementById('btn-gt-online');
@@ -6336,10 +6394,8 @@
 
             function updateTimerAvailabilityForGameType() {
                 const noTimerChip = document.querySelector('#timer-chip-group .no-timer-chip');
-                const hint = document.getElementById('timer-online-required-hint');
                 if (!noTimerChip) return;
                 noTimerChip.classList.toggle('locked', selectedGameTypeOnline);
-                hint.style.display = selectedGameTypeOnline ? 'block' : 'none';
                 if (selectedGameTypeOnline && selectedTimerSeconds === 0) setSelectedTimer(DEFAULT_TIMER_SECONDS)
             }
 
@@ -6351,7 +6407,10 @@
                 })
             }
             document.querySelectorAll('#timer-chip-group .timer-chip').forEach(chip => {
-                chip.onclick = () => setSelectedTimer(parseInt(chip.dataset.secs, 10))
+                chip.onclick = () => {
+                    setSelectedTimer(parseInt(chip.dataset.secs, 10));
+                    localStorage.setItem('barricade-timer-pref', selectedTimerSeconds)
+                }
             });
 
             function switchClassicSubMode(mode) {
@@ -6371,8 +6430,8 @@
                 selectedMode = mode;
                 document.getElementById('mode-select-view').style.display = 'none';
                 document.getElementById('name-entry-view').style.display = 'block';
-                setGameType(!1);
-                setSelectedTimer(DEFAULT_TIMER_SECONDS);
+                setGameType(selectedGameTypeOnline);
+                setSelectedTimer(selectedTimerSeconds);
                 const pcToggle = document.getElementById('player-count-toggle');
                 if (isClassic) {
                     pcToggle.style.display = 'flex';
@@ -6404,14 +6463,23 @@
                     onlineState.mode = selectedMode;
                     onlineState.timerSeconds = selectedTimerSeconds;
                     onlineEntryFromNameEntry = !0;
+                    const codeVal = onlineNameEntryCodeInput ? onlineNameEntryCodeInput.value.trim().toUpperCase() : '';
                     document.getElementById('name-entry-view').style.display = 'none';
                     onlineSetupView.style.display = 'block';
                     onlineModeSelectView.style.display = 'none';
-                    onlineChoiceView.style.display = 'flex';
+                    onlineChoiceView.style.display = 'none';
                     onlineCreateView.style.display = 'none';
-                    onlineJoinView.style.display = 'none';
-                    otpClear();
                     onlineJoinStatus.textContent = '';
+                    if (codeVal.length >= 5) {
+                        // A code was typed right here on the settings screen —
+                        // connect directly instead of asking for it again on
+                        // a separate "join" screen.
+                        onlineJoinView.style.display = 'flex';
+                        onlineJoinView.classList.add('autoconnecting');
+                        startOnlineJoinFlow(codeVal, !1)
+                    } else {
+                        startOnlineCreateFlow()
+                    }
                     return
                 }
                 if (selectedMode === '2p') {
@@ -6665,10 +6733,6 @@
 
             function getCoordStr(row, col) {
                 return colLetters[col] + (9 - row)
-            }
-
-            function inBounds(r, c) {
-                return r >= 0 && r < 9 && c >= 0 && c < 9
             }
 
             function canPassBetween(r, c, dr, dc) {
@@ -8004,6 +8068,15 @@
             trapBackNav();
             window.addEventListener('popstate', handleHardwareBack);
         })()
+    </script>
+    <script>
+        // Caches fonts/images on first visit (via sw.js) so later visits
+        // skip re-downloading them and the site opens faster.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            });
+        }
     </script>
 </body>
 </html>
