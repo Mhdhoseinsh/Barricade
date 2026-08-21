@@ -90,7 +90,18 @@ io.on('connection', (socket) => {
     const room = rooms.get(code);
     if (!room) { if (ack) ack({ ok: false, error: 'not-found' }); return; }
 
-    const limit = maxPlayers || room.maxPlayers || 2;
+    // اگه همین سوکت قبلاً یک جا توی همین روم گرفته (مثلاً دابل‌کلیک روی
+    // دکمه‌ی اتصال)، همون اسلات قبلی رو برگردون؛ یک اسلات دوم مصرف نکن.
+    if (socket.data.roomCode === code && socket.data.slot !== null && socket.data.slot !== undefined) {
+      const mine = room.players[socket.data.slot];
+      if (mine && mine.connected) { if (ack) ack({ ok: true, slot: socket.data.slot }); return; }
+    }
+
+    // ظرفیت واقعی اتاق همونیه که موقع ساخته‌شدنش (توسط میزبان) ثبت شده؛
+    // به عددی که یک کلاینت جوین‌شونده لحظه‌ای می‌فرسته اعتماد نمی‌کنیم،
+    // چون اگه اشتباه باشه (مثلاً حالت بازی محلی‌اش درست ست نشده بود)
+    // باعث می‌شد اتاق زودتر از موقع "پر" اعلام بشه.
+    const limit = room.maxPlayers || maxPlayers || 2;
     let slot = -1;
     for (let i = 0; i < limit; i++) {
       const existing = room.players[i];
