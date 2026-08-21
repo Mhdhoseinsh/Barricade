@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="description" content="Route 9 — an offline pass-and-play strategy board game. Block your rivals with walls and race to the finish, solo, 1v1, 2v2 team battles, or Wolf vs Sheep mode.">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.firebaseio.com wss://*.firebaseio.com https://*.googleapis.com https://firebase.googleapis.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://barricade.onrender.com wss://barricade.onrender.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self';">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
     <link rel="apple-touch-icon" href="icon-180.png">
@@ -4067,134 +4067,105 @@
     </div>
 
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        import {
-            getDatabase, ref, set, get, push, remove, update, runTransaction,
-            onChildAdded, onValue, onDisconnect, serverTimestamp
-        } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+    <script src="https://unpkg.com/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
+    <script>
+        (function() {
+            // ====== آدرس سرور آنلاین بازی (Socket.io) ======
+            // بعد از دیپلوی سرور (پوشه‌ی server/) روی Render یا هر هاست دیگری،
+            // این مقدار را با آدرس واقعی سرورت جایگزین کن. همین رشته دقیقاً توی
+            // متای CSP بالای فایل هم هست — هر دو جا را با هم عوض کن.
+            // مثال: "https://route9-server.onrender.com"
+            const GAME_SERVER_URL = "https://barricade.onrender.com";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDZNATL758Kbw4vmdtNArwEE3Go_OsNXMU",
-            authDomain: "route9-gg.firebaseapp.com",
-            databaseURL: "https://route9-gg-default-rtdb.firebaseio.com",
-            projectId: "route9-gg",
-            storageBucket: "route9-gg.firebasestorage.app",
-            messagingSenderId: "704279494875",
-            appId: "1:704279494875:web:52a8b279e55cac71890cfe"
-        };
+            let socket = null;
 
-        const fbApp = initializeApp(firebaseConfig);
-        const fbDb = getDatabase(fbApp);
-
-        window.FBRoom = {
-            db: fbDb,
-            ref, set, get, push, remove, update, onChildAdded, onValue, onDisconnect, serverTimestamp, runTransaction,
-
-            _roomCode: null,
-            _mySlotId: null,
-            _msgListeners: [],
-            _presenceListeners: [],
-            _joinedAt: 0,
-
-            async createRoom(maxPlayers) {
-                const code = window.FBRoom._genCode();
-                const roomRef = ref(fbDb, 'rooms/' + code);
-                await set(roomRef, {
-                    createdAt: serverTimestamp(),
-                    maxPlayers: maxPlayers,
-                    status: 'lobby'
-                });
-                return code
-            },
-
-            _genCode() {
-                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                let s = '';
-                for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
-                return s
-            },
-
-            async roomExists(code) {
-                const snap = await get(ref(fbDb, 'rooms/' + code));
-                return snap.exists()
-            },
-
-            async joinRoom(code, maxPlayers) {
-                const playersRef = ref(fbDb, 'rooms/' + code + '/players');
-                let claimedSlot = -1;
-                const result = await runTransaction(playersRef, (current) => {
-                    const taken = current || {};
-                    let slot = -1;
-                    for (let i = 0; i < maxPlayers; i++) {
-                        if (!taken[i] || taken[i].connected === !1) { slot = i; break }
-                    }
-                    if (slot === -1) return; // abort, room full — undefined aborts the transaction
-                    claimedSlot = slot;
-                    taken[slot] = { joinedAt: Date.now(), connected: !0 };
-                    return taken
-                });
-                if (!result.committed || claimedSlot === -1) return null;
-                const slotRef = ref(fbDb, 'rooms/' + code + '/players/' + claimedSlot);
-                onDisconnect(slotRef).update({ connected: !1, leftAt: Date.now() });
-                window.FBRoom._roomCode = code;
-                window.FBRoom._mySlotId = claimedSlot;
-                window.FBRoom._joinedAt = Date.now();
-                return claimedSlot
-            },
-
-            send(data) {
-                if (!window.FBRoom._roomCode) return;
-                const msgsRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/msgs');
-                push(msgsRef, {
-                    from: window.FBRoom._mySlotId,
-                    t: Date.now(),
-                    payload: JSON.stringify(data)
-                }).catch(() => {})
-            },
-
-            onMessage(callback) {
-                if (!window.FBRoom._roomCode) return;
-                const msgsRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/msgs');
-                const unsub = onChildAdded(msgsRef, (snap) => {
-                    const v = snap.val();
-                    if (!v || v.from === window.FBRoom._mySlotId) return;
-                    if (v.t && v.t < window.FBRoom._joinedAt - 2000) return;
-                    let payload = null;
-                    try { payload = JSON.parse(v.payload) } catch (e) { return }
-                    callback(payload, v.from)
-                });
-                window.FBRoom._msgListeners.push(unsub);
-                return unsub
-            },
-
-            onPresence(maxPlayers, callback) {
-                if (!window.FBRoom._roomCode) return;
-                const playersRef = ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/players');
-                const unsub = onValue(playersRef, (snap) => {
-                    const v = snap.exists() ? snap.val() : {};
-                    callback(v)
-                });
-                window.FBRoom._presenceListeners.push(unsub);
-                return unsub
-            },
-
-            async leaveRoom() {
-                if (window.FBRoom._roomCode && window.FBRoom._mySlotId !== null) {
-                    try {
-                        await update(ref(fbDb, 'rooms/' + window.FBRoom._roomCode + '/players/' + window.FBRoom._mySlotId), { connected: !1, leftAt: Date.now() })
-                    } catch (e) {}
+            function getSocket() {
+                if (!socket) {
+                    socket = io(GAME_SERVER_URL);
                 }
-                window.FBRoom._msgListeners.forEach(u => { try { u() } catch (e) {} });
-                window.FBRoom._presenceListeners.forEach(u => { try { u() } catch (e) {} });
-                window.FBRoom._msgListeners = [];
-                window.FBRoom._presenceListeners = [];
-                window.FBRoom._roomCode = null;
-                window.FBRoom._mySlotId = null
+                return socket
             }
-        };
 
-        window.dispatchEvent(new Event('fbroom-ready'));
+            function emitAck(event, data) {
+                return new Promise((resolve, reject) => {
+                    getSocket().emit(event, data, (res) => {
+                        if (res === undefined) { reject(new Error('no-response')); return }
+                        resolve(res)
+                    })
+                })
+            }
+
+            window.FBRoom = {
+                _roomCode: null,
+                _mySlotId: null,
+                _msgListeners: [],
+                _presenceListeners: [],
+                _joinedAt: 0,
+
+                async createRoom(maxPlayers) {
+                    const res = await emitAck('createRoom', { maxPlayers });
+                    if (!res || !res.ok) throw new Error((res && res.error) || 'create-failed');
+                    return res.code
+                },
+
+                async roomExists(code) {
+                    const res = await emitAck('roomExists', { code });
+                    return !!(res && res.exists)
+                },
+
+                async joinRoom(code, maxPlayers) {
+                    const res = await emitAck('joinRoom', { code, maxPlayers });
+                    if (!res || !res.ok) return null;
+                    window.FBRoom._roomCode = code;
+                    window.FBRoom._mySlotId = res.slot;
+                    window.FBRoom._joinedAt = Date.now();
+                    return res.slot
+                },
+
+                send(data) {
+                    if (!window.FBRoom._roomCode) return;
+                    getSocket().emit('roomMessage', { payload: data })
+                },
+
+                onMessage(callback) {
+                    const handler = (msg) => {
+                        if (!msg) return;
+                        if (msg.from === window.FBRoom._mySlotId) return;
+                        if (msg.t && msg.t < window.FBRoom._joinedAt - 2000) return;
+                        callback(msg.payload, msg.from)
+                    };
+                    getSocket().on('roomMessage', handler);
+                    const unsub = () => { try { getSocket().off('roomMessage', handler) } catch (e) {} };
+                    window.FBRoom._msgListeners.push(unsub);
+                    return unsub
+                },
+
+                onPresence(maxPlayers, callback) {
+                    const handler = (playersObj) => callback(playersObj || {});
+                    getSocket().on('presence', handler);
+                    const unsub = () => { try { getSocket().off('presence', handler) } catch (e) {} };
+                    window.FBRoom._presenceListeners.push(unsub);
+                    emitAck('getPresence', {}).then((res) => {
+                        if (res && res.players) callback(res.players)
+                    }).catch(() => {});
+                    return unsub
+                },
+
+                async leaveRoom() {
+                    if (window.FBRoom._roomCode && socket) {
+                        try { socket.emit('leaveRoom') } catch (e) {}
+                    }
+                    window.FBRoom._msgListeners.forEach(u => { try { u() } catch (e) {} });
+                    window.FBRoom._presenceListeners.forEach(u => { try { u() } catch (e) {} });
+                    window.FBRoom._msgListeners = [];
+                    window.FBRoom._presenceListeners = [];
+                    window.FBRoom._roomCode = null;
+                    window.FBRoom._mySlotId = null
+                }
+            };
+
+            window.dispatchEvent(new Event('fbroom-ready'));
+        })()
     </script>
     <script>
         (function() {
